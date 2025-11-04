@@ -1,0 +1,939 @@
+{% extends "base.html" %}
+
+{% block title %}Test Page - DNA Sequence Pattern Finder{% endblock %}
+
+{% block head %}
+<style>
+    /* Test Page Styles */
+    .test-container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .header-section {
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(114, 9, 183, 0.05));
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+        text-align: center;
+    }
+    
+    .header-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+    }
+    
+    .header-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        color: white;
+        background: var(--gradient);
+        box-shadow: var(--shadow);
+    }
+    
+    .header-description {
+        color: var(--dark-color);
+        opacity: 0.8;
+        font-size: 1.1rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    
+    /* Test Sections */
+    .test-section {
+        background: white;
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .section-header {
+        background: var(--gradient);
+        color: white;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .section-body {
+        padding: 2rem;
+    }
+    
+    /* Upload Test */
+    .upload-area {
+        border: 3px dashed rgba(67, 97, 238, 0.5);
+        border-radius: 15px;
+        padding: 3rem 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(114, 9, 183, 0.05));
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .upload-area::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('{{ url_for("static", filename="images/dna-pattern.png") }}') repeat;
+        opacity: 0.05;
+        z-index: 0;
+    }
+    
+    .upload-area:hover {
+        border-color: var(--primary-color);
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(67, 97, 238, 0.2);
+    }
+    
+    .upload-area.dragover {
+        border-color: var(--success-color);
+        background: linear-gradient(135deg, rgba(6, 255, 165, 0.1), rgba(0, 180, 216, 0.1));
+    }
+    
+    .upload-content {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .upload-icon {
+        font-size: 4rem;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+    
+    .upload-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+    
+    .upload-description {
+        color: var(--dark-color);
+        opacity: 0.8;
+        margin-bottom: 1.5rem;
+    }
+    
+    .btn-upload {
+        padding: 0.75rem 2rem;
+        border-radius: 30px;
+        font-weight: 600;
+        background: var(--gradient);
+        color: white;
+        border: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .btn-upload:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);
+    }
+    
+    /* File Info Display */
+    .file-info-display {
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
+        border: 1px solid rgba(67, 97, 238, 0.3);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+        display: none;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .file-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        background: var(--gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+    }
+    
+    .file-details {
+        flex-grow: 1;
+    }
+    
+    .file-name {
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 0.25rem;
+    }
+    
+    .file-size {
+        color: var(--dark-color);
+        opacity: 0.7;
+        font-size: 0.9rem;
+    }
+    
+    .remove-file {
+        background: rgba(251, 86, 7, 0.1);
+        color: var(--danger-color);
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+    
+    .remove-file:hover {
+        background: var(--danger-color);
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    /* Test Results */
+    .test-result {
+        margin-top: 2rem;
+        border-radius: 15px;
+        overflow: hidden;
+        display: none;
+    }
+    
+    .result-success {
+        background: linear-gradient(135deg, rgba(6, 255, 165, 0.1), rgba(0, 180, 216, 0.1));
+        border: 1px solid rgba(6, 255, 165, 0.3);
+        padding: 1.5rem;
+    }
+    
+    .result-error {
+        background: linear-gradient(135deg, rgba(251, 86, 7, 0.1), rgba(255, 190, 11, 0.1));
+        border: 1px solid rgba(251, 86, 7, 0.3);
+        padding: 1.5rem;
+    }
+    
+    .result-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .result-success .result-title {
+        color: var(--success-color);
+    }
+    
+    .result-error .result-title {
+        color: var(--danger-color);
+    }
+    
+    .result-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+    
+    .result-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .result-label {
+        font-weight: 500;
+        color: var(--dark-color);
+        opacity: 0.7;
+    }
+    
+    .result-value {
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+    
+    /* System Status */
+    .status-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .status-item {
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(114, 9, 183, 0.05));
+        border-radius: 10px;
+        padding: 1.5rem;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+    
+    .status-item:hover {
+        transform: translateY(-5px);
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
+    }
+    
+    .status-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+        background: var(--gradient);
+        margin: 0 auto 1rem;
+    }
+    
+    .status-label {
+        font-weight: 500;
+        color: var(--dark-color);
+        margin-bottom: 0.5rem;
+    }
+    
+    .status-value {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+    
+    .status-online {
+        color: var(--success-color);
+    }
+    
+    .status-offline {
+        color: var(--danger-color);
+    }
+    
+    /* API Test */
+    .api-test-form {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .api-endpoint {
+        flex-grow: 1;
+    }
+    
+    .api-method {
+        width: 100px;
+    }
+    
+    .api-response {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.9rem;
+        max-height: 300px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+    
+    /* Configuration Display */
+    .config-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+    
+    .config-table th {
+        background: var(--gradient);
+        color: white;
+        font-weight: 600;
+        padding: 0.75rem;
+        text-align: left;
+    }
+    
+    .config-table td {
+        padding: 0.75rem;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .config-table tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .config-value {
+        font-family: 'Roboto Mono', monospace;
+        color: var(--primary-color);
+    }
+    
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+    
+    .btn-action {
+        padding: 0.75rem 2rem;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .btn-primary-action {
+        background: var(--gradient);
+        color: white;
+        border: none;
+    }
+    
+    .btn-primary-action:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);
+    }
+    
+    .btn-secondary-action {
+        background: transparent;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+    }
+    
+    .btn-secondary-action:hover {
+        background: var(--gradient);
+        color: white;
+        border-color: transparent;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .header-title {
+            font-size: 2rem;
+        }
+        
+        .upload-area {
+            padding: 2rem 1rem;
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+        }
+        
+        .upload-title {
+            font-size: 1.3rem;
+        }
+        
+        .api-test-form {
+            flex-direction: column;
+        }
+        
+        .api-method {
+            width: 100%;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn-action {
+            width: 100%;
+            max-width: 300px;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5 test-container">
+    <!-- Header Section -->
+    <div class="header-section" data-aos="fade-up">
+        <div class="header-icon">
+            <i class="fas fa-vial"></i>
+        </div>
+        <h1 class="header-title">Test Page</h1>
+        <p class="header-description">
+            Test various components of the DNA Species Classifier to ensure everything is working correctly.
+        </p>
+    </div>
+    
+    <!-- System Status Section -->
+    <div class="test-section" data-aos="fade-up" data-aos-delay="100">
+        <div class="section-header">
+            <h5 class="section-title">
+                <i class="fas fa-heartbeat me-2"></i> System Status
+            </h5>
+        </div>
+        <div class="section-body">
+            <div class="status-grid">
+                <div class="status-item">
+                    <div class="status-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <div class="status-label">Server Status</div>
+                    <div class="status-value status-online">Online</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="status-label">Database</div>
+                    <div class="status-value status-online">Connected</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="status-label">ML Model</div>
+                    <div class="status-value {% if model %}status-online{% else %}status-offline{% endif %}">
+                        {% if model %}Loaded{% else %}Not Loaded{% endif %}
+                    </div>
+                </div>
+                <div class="status-item">
+                    <div class="status-icon">
+                        <i class="fas fa-hdd"></i>
+                    </div>
+                    <div class="status-label">Storage</div>
+                    <div class="status-value status-online">Available</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- File Upload Test -->
+    <div class="test-section" data-aos="fade-up" data-aos-delay="200">
+        <div class="section-header">
+            <h5 class="section-title">
+                <i class="fas fa-upload me-2"></i> File Upload Test
+            </h5>
+        </div>
+        <div class="section-body">
+            <form id="testForm" enctype="multipart/form-data">
+                <!-- Upload Area -->
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-content">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h5 class="upload-title">Drag & Drop your FASTA file here</h5>
+                        <p class="upload-description">or click to browse</p>
+                        <input type="file" id="testFile" accept=".fasta,.fa,.txt" style="display: none;">
+                        <button type="button" class="btn-upload" id="browseButton">
+                            <i class="fas fa-folder-open me-2"></i> Browse Files
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- File Info Display -->
+                <div id="fileInfo" class="file-info-display">
+                    <div class="file-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="file-details">
+                        <div class="file-name" id="fileName"></div>
+                        <div class="file-size" id="fileSize"></div>
+                    </div>
+                    <button type="button" class="remove-file" id="removeFile">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="text-center mt-4">
+                    <button type="submit" id="testSubmitBtn" class="btn-action btn-primary-action" disabled>
+                        <i class="fas fa-vial me-2"></i> Test Upload
+                    </button>
+                </div>
+            </form>
+            
+            <!-- Test Results -->
+            <div id="testResult" class="test-result"></div>
+        </div>
+    </div>
+    
+    <!-- API Test -->
+    <div class="test-section" data-aos="fade-up" data-aos-delay="300">
+        <div class="section-header">
+            <h5 class="section-title">
+                <i class="fas fa-plug me-2"></i> API Test
+            </h5>
+        </div>
+        <div class="section-body">
+            <div class="api-test-form">
+                <div class="api-endpoint">
+                    <select class="form-select" id="apiEndpoint">
+                        <option value="/api/references">GET /api/references</option>
+                        <option value="/api/upload">POST /api/upload</option>
+                        <option value="/api/analyze">POST /api/analyze</option>
+                    </select>
+                </div>
+                <div class="api-method">
+                    <select class="form-select" id="apiMethod">
+                        <option value="GET">GET</option>
+                        <option value="POST">POST</option>
+                    </select>
+                </div>
+                <button type="button" id="testApiBtn" class="btn-action btn-primary-action">
+                    <i class="fas fa-play me-2"></i> Test
+                </button>
+            </div>
+            
+            <div id="apiResponse" class="api-response" style="display: none;">
+                <!-- API response will be displayed here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Configuration Display -->
+    <div class="test-section" data-aos="fade-up" data-aos-delay="400">
+        <div class="section-header">
+            <h5 class="section-title">
+                <i class="fas fa-cog me-2"></i> Configuration
+            </h5>
+        </div>
+        <div class="section-body">
+            <table class="config-table">
+                <thead>
+                    <tr>
+                        <th>Setting</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Upload Folder</td>
+                        <td class="config-value">{{ app.config['UPLOAD_FOLDER'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>References Folder</td>
+                        <td class="config-value">{{ app.config['REFERENCES_FOLDER'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Model Folder</td>
+                        <td class="config-value">{{ app.config['MODEL_DIR'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Max Content Length</td>
+                        <td class="config-value">{{ "{:,}".format(app.config['MAX_CONTENT_LENGTH']) }} bytes</td>
+                    </tr>
+                    <tr>
+                        <td>Max Sequences</td>
+                        <td class="config-value">{{ app.config['MAX_SEQUENCES'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Session Timeout</td>
+                        <td class="config-value">{{ app.config['SESSION_TIMEOUT'] }} seconds</td>
+                    </tr>
+                    <tr>
+                        <td>Model Status</td>
+                        <td class="config-value">{% if model %}Loaded{% else %}Not Loaded{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td>Available Species</td>
+                        <td class="config-value">{{ species_list|length if species_list else 0 }} species</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="action-buttons" data-aos="fade-up" data-aos-delay="500">
+        <a href="{{ url_for('index') }}" class="btn-action btn-secondary-action">
+            <i class="fas fa-home me-2"></i> Back to Home
+        </a>
+        <a href="{{ url_for('upload') }}" class="btn-action btn-primary-action">
+            <i class="fas fa-upload me-2"></i> Analyze DNA
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // File upload handlers
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('testFile');
+    const browseButton = document.getElementById('browseButton');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const removeFile = document.getElementById('removeFile');
+    const testSubmitBtn = document.getElementById('testSubmitBtn');
+    const testForm = document.getElementById('testForm');
+    const testResult = document.getElementById('testResult');
+    
+    // File upload handlers
+    browseButton.addEventListener('click', function(e) {
+        e.stopPropagation();
+        fileInput.click();
+    });
+    
+    uploadArea.addEventListener('click', () => fileInput.click());
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            handleFileSelect(files[0]);
+        }
+    });
+    
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleFileSelect(e.target.files[0]);
+        }
+    });
+    
+    removeFile.addEventListener('click', function() {
+        fileInput.value = '';
+        fileInfo.style.display = 'none';
+        testSubmitBtn.disabled = true;
+    });
+    
+    function handleFileSelect(file) {
+        // Check file type
+        const allowedTypes = ['fasta', 'fa', 'txt'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        
+        if (!allowedTypes.includes(fileExtension)) {
+            showTestResult('error', 'Invalid file type. Please upload a FASTA (.fasta, .fa) or plain text (.txt) file.');
+            fileInput.value = '';
+            return;
+        }
+        
+        // Check file size
+        const fileSizeInMB = file.size / (1024 * 1024);
+        const fileSizeInGB = fileSizeInMB / 1024;
+        
+        let fileSizeText = '';
+        if (fileSizeInGB >= 1) {
+            fileSizeText = `${fileSizeInGB.toFixed(2)} GB`;
+        } else {
+            fileSizeText = `${fileSizeInMB.toFixed(2)} MB`;
+        }
+        
+        if (file.size > 2 * 1024 * 1024 * 1024) {  // 2GB
+            showTestResult('error', 'File is too large for analysis. Please use a file smaller than 2GB.');
+            fileInput.value = '';
+            return;
+        }
+        
+        fileName.textContent = file.name;
+        fileSize.textContent = `Size: ${fileSizeText}`;
+        fileInfo.style.display = 'flex';
+        testSubmitBtn.disabled = false;
+    }
+    
+    // Form submission
+    testForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (fileInput.files.length === 0) {
+            showTestResult('error', 'Please select a file');
+            return;
+        }
+        
+        // Show loading state
+        testSubmitBtn.disabled = true;
+        testSubmitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Testing...';
+        
+        const formData = new FormData();
+        formData.append('dna_file', fileInput.files[0]);
+        
+        fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                showTestResult('error', data.error);
+            } else {
+                showTestResult('success', data);
+            }
+            
+            // Reset button state
+            testSubmitBtn.disabled = false;
+            testSubmitBtn.innerHTML = '<i class="fas fa-vial me-2"></i> Test Upload';
+        })
+        .catch(error => {
+            showTestResult('error', `Error: ${error.message}`);
+            
+            // Reset button state
+            testSubmitBtn.disabled = false;
+            testSubmitBtn.innerHTML = '<i class="fas fa-vial me-2"></i> Test Upload';
+        });
+    });
+    
+    function showTestResult(type, data) {
+        testResult.style.display = 'block';
+        
+        if (type === 'success') {
+            testResult.className = 'test-result result-success';
+            testResult.innerHTML = `
+                <div class="result-title">
+                    <i class="fas fa-check-circle me-2"></i> Upload Successful!
+                </div>
+                <div class="result-details">
+                    <div class="result-item">
+                        <span class="result-label">Filename:</span>
+                        <span class="result-value">${data.filename}</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">File Hash:</span>
+                        <span class="result-value">${data.file_hash.substring(0, 16)}...</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Sequence Count:</span>
+                        <span class="result-value">${data.sequence_count}</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">First Sequence:</span>
+                        <span class="result-value">${data.first_sequence.substring(0, 50)}...</span>
+                    </div>
+                </div>
+            `;
+        } else {
+            testResult.className = 'test-result result-error';
+            testResult.innerHTML = `
+                <div class="result-title">
+                    <i class="fas fa-exclamation-triangle me-2"></i> Upload Failed
+                </div>
+                <div class="result-details">
+                    <div class="result-item">
+                        <span class="result-label">Error:</span>
+                        <span class="result-value">${data}</span>
+                    </div>
+                </div>
+            `;
+        }
+    }
+    
+    // API Test
+    const apiEndpoint = document.getElementById('apiEndpoint');
+    const apiMethod = document.getElementById('apiMethod');
+    const testApiBtn = document.getElementById('testApiBtn');
+    const apiResponse = document.getElementById('apiResponse');
+    
+    testApiBtn.addEventListener('click', function() {
+        const endpoint = apiEndpoint.value;
+        const method = apiMethod.value;
+        
+        // Show loading state
+        testApiBtn.disabled = true;
+        testApiBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Testing...';
+        
+        // Prepare request options
+        const options = {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+        
+        // Add body for POST requests
+        if (method === 'POST') {
+            if (endpoint === '/api/upload') {
+                // For upload, we can't test without a file, so we'll show a message
+                apiResponse.style.display = 'block';
+                apiResponse.textContent = 'POST /api/upload requires a file upload. Please use the File Upload Test above.';
+                
+                // Reset button state
+                testApiBtn.disabled = false;
+                testApiBtn.innerHTML = '<i class="fas fa-play me-2"></i> Test';
+                return;
+            } else if (endpoint === '/api/analyze') {
+                options.body = JSON.stringify({
+                    filename: 'test.fasta',
+                    analysis_type: 'basic'
+                });
+            }
+        }
+        
+        fetch(endpoint, options)
+        .then(response => {
+            const contentType = response.headers.get('content-type');
+            
+            if (contentType && contentType.includes('application/json')) {
+                return response.json();
+            } else {
+                return response.text();
+            }
+        })
+        .then(data => {
+            // Display response
+            apiResponse.style.display = 'block';
+            apiResponse.textContent = typeof data === 'object' ? JSON.stringify(data, null, 2) : data;
+            
+            // Reset button state
+            testApiBtn.disabled = false;
+            testApiBtn.innerHTML = '<i class="fas fa-play me-2"></i> Test';
+        })
+        .catch(error => {
+            // Display error
+            apiResponse.style.display = 'block';
+            apiResponse.textContent = `Error: ${error.message}`;
+            
+            // Reset button state
+            testApiBtn.disabled = false;
+            testApiBtn.innerHTML = '<i class="fas fa-play me-2"></i> Test';
+        });
+    });
+    
+    // Update method when endpoint changes
+    apiEndpoint.addEventListener('change', function() {
+        const endpoint = this.value;
+        
+        if (endpoint === '/api/references') {
+            apiMethod.value = 'GET';
+            apiMethod.disabled = true;
+        } else {
+            apiMethod.disabled = false;
+        }
+    });
+});
+</script>
+{% endblock %}

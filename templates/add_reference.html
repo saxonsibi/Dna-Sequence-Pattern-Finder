@@ -1,0 +1,659 @@
+{% extends "base.html" %}
+
+{% block title %}Add Reference Sequence - DNA Sequence Pattern Finder{% endblock %}
+
+{% block head %}
+<style>
+    /* Add Reference Container */
+    .add-reference-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    /* Header Section */
+    .header-section {
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(114, 9, 183, 0.05));
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+        text-align: center;
+    }
+    
+    .header-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        color: white;
+        background: var(--gradient);
+        margin: 0 auto 1.5rem;
+        box-shadow: var(--shadow);
+    }
+    
+    .header-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+    
+    .header-description {
+        color: var(--dark-color);
+        opacity: 0.8;
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    /* Form Card */
+    .form-card {
+        border-radius: 15px;
+        border: none;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .form-header {
+        background: var(--gradient);
+        color: white;
+        padding: 1.5rem;
+        text-align: center;
+    }
+    
+    .form-header h5 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.5rem;
+    }
+    
+    .form-body {
+        padding: 2.5rem;
+    }
+    
+    /* Upload Area */
+    .upload-area {
+        border: 3px dashed rgba(67, 97, 238, 0.5);
+        border-radius: 15px;
+        padding: 3rem 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(114, 9, 183, 0.05));
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .upload-area:hover {
+        border-color: var(--primary-color);
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(67, 97, 238, 0.2);
+    }
+    
+    .upload-area.dragover {
+        border-color: var(--success-color);
+        background: linear-gradient(135deg, rgba(6, 255, 165, 0.1), rgba(0, 180, 216, 0.1));
+    }
+    
+    .upload-content {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .upload-icon {
+        font-size: 4rem;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+    
+    .upload-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+    
+    .upload-description {
+        color: var(--dark-color);
+        opacity: 0.8;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Custom File Input */
+    .file-input-container {
+        position: relative;
+        display: inline-block;
+        margin: 0 auto;
+    }
+    
+    .file-input {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: 50px;
+        opacity: 0;
+        cursor: pointer;
+    }
+    
+    .file-input-button {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 2rem;
+        border-radius: 30px;
+        font-weight: 600;
+        background: var(--gradient);
+        color: white;
+        border: none;
+        transition: all 0.3s ease;
+        pointer-events: none;
+    }
+    
+    .file-input-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);
+    }
+    
+    /* File Info Display */
+    .file-info-display {
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
+        border: 1px solid rgba(67, 97, 238, 0.3);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+        display: none;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .file-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        background: var(--gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+    }
+    
+    .file-details {
+        flex-grow: 1;
+    }
+    
+    .file-name {
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 0.25rem;
+    }
+    
+    .file-size {
+        color: var(--dark-color);
+        opacity: 0.7;
+        font-size: 0.9rem;
+    }
+    
+    .remove-file {
+        background: rgba(251, 86, 7, 0.1);
+        color: var(--danger-color);
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .remove-file:hover {
+        background: var(--danger-color);
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+    
+    .btn-action {
+        padding: 0.75rem 2rem;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+    }
+    
+    .btn-primary-action {
+        background: var(--gradient);
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .btn-primary-action:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);
+    }
+    
+    .btn-primary-action:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+    
+    .btn-secondary-action {
+        background: transparent;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+    }
+    
+    .btn-secondary-action:hover {
+        background: var(--gradient);
+        color: white;
+        border-color: transparent;
+    }
+    
+    /* Guidelines Section */
+    .guidelines-section {
+        background: linear-gradient(135deg, rgba(255, 190, 11, 0.1), rgba(251, 86, 7, 0.1));
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(255, 190, 11, 0.3);
+    }
+    
+    .guidelines-title {
+        color: var(--warning-color);
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.3rem;
+    }
+    
+    .guidelines-list {
+        margin: 0;
+        padding-left: 1.5rem;
+    }
+    
+    .guidelines-list li {
+        margin-bottom: 0.75rem;
+        color: var(--dark-color);
+        line-height: 1.6;
+    }
+    
+    .guidelines-list li strong {
+        color: var(--warning-color);
+    }
+    
+    /* Naming Convention Section */
+    .naming-section {
+        background: linear-gradient(135deg, rgba(0, 180, 216, 0.1), rgba(6, 255, 165, 0.1));
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(0, 180, 216, 0.3);
+    }
+    
+    .naming-title {
+        color: var(--info-color);
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.3rem;
+    }
+    
+    .species-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+    
+    .species-tag {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .species-tag-human { background: linear-gradient(135deg, #4361ee, #3f37c9); }
+    .species-tag-mouse { background: linear-gradient(135deg, #7209b7, #560bad); }
+    .species-tag-zebrafish { background: linear-gradient(135deg, #06ffa5, #00b4d8); }
+    .species-tag-arabidopsis { background: linear-gradient(135deg, #06ffa5, #00b4d8); }
+    .species-tag-ecoli { background: linear-gradient(135deg, #ffbe0b, #fb5607); }
+    .species-tag-bsubtilis { background: linear-gradient(135deg, #7209b7, #560bad); }
+    
+    /* Progress Bar */
+    .progress-container {
+        margin-top: 1.5rem;
+        display: none;
+    }
+    
+    .progress {
+        height: 8px;
+        border-radius: 4px;
+        background-color: rgba(67, 97, 238, 0.1);
+    }
+    
+    .progress-bar {
+        background: var(--gradient);
+        border-radius: 4px;
+        transition: width 0.3s ease;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .header-title {
+            font-size: 2rem;
+        }
+        
+        .upload-area {
+            padding: 2rem 1rem;
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+        }
+        
+        .upload-title {
+            font-size: 1.3rem;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn-action {
+            width: 100%;
+            max-width: 300px;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5 add-reference-container">
+    <!-- Header Section -->
+    <div class="header-section" data-aos="fade-up">
+        <div class="header-icon">
+            <i class="fas fa-plus-circle"></i>
+        </div>
+        <h1 class="header-title">Add Reference Sequence</h1>
+        <p class="header-description">
+            Upload a FASTA file to use as a reference sequence for mutation analysis. Reference sequences are used as a baseline to compare against your uploaded DNA sequences.
+        </p>
+    </div>
+    
+    <!-- Upload Form -->
+    <div class="form-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="form-header">
+            <h5><i class="fas fa-upload me-2"></i> Upload Reference Sequence</h5>
+        </div>
+        <div class="form-body">
+            <!-- Added no-global-spinner class to prevent interference with base.html spinner -->
+            <form id="referenceForm" method="POST" enctype="multipart/form-data" action="{{ url_for('add_reference') }}" class="no-global-spinner">
+                <!-- Upload Area -->
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-content">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h5 class="upload-title">Drag & Drop your FASTA file here</h5>
+                        <p class="upload-description">or click to browse</p>
+                        
+                        <!-- Custom File Input -->
+                        <div class="file-input-container">
+                            <input type="file" id="referenceFile" name="reference_file" accept=".fasta,.fa,.fas,.fna,.ffn,.faa,.frn,.txt" class="file-input" required>
+                            <div class="file-input-button">
+                                <i class="fas fa-folder-open me-2"></i> Browse Files
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- File Info Display -->
+                <div id="fileInfo" class="file-info-display">
+                    <div class="file-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="file-details">
+                        <div class="file-name" id="fileName"></div>
+                        <div class="file-size" id="fileSize"></div>
+                    </div>
+                    <button type="button" class="remove-file" id="removeFile">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress">
+                        <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="action-buttons">
+                    <button type="submit" id="submitBtn" class="btn-action btn-primary-action" disabled>
+                        <i class="fas fa-save me-2"></i> Add Reference
+                    </button>
+                    <a href="{{ url_for('list_references') }}" class="btn-action btn-secondary-action">
+                        <i class="fas fa-arrow-left me-2"></i> Back to References
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Guidelines Section -->
+    <div class="guidelines-section" data-aos="fade-up" data-aos-delay="200">
+        <div class="guidelines-title">
+            <i class="fas fa-info-circle"></i> File Guidelines
+        </div>
+        <ul class="guidelines-list">
+            <li><strong>File Format:</strong> Only FASTA (.fasta, .fa, .fas, .fna, .ffn, .faa, .frn) or plain text (.txt) files are supported.</li>
+            <li><strong>File Size:</strong> Maximum file size is 2GB. Larger files may take longer to process.</li>
+            <li><strong>Sequence Quality:</strong> Ensure sequences are of high quality with minimal N characters.</li>
+            <li><strong>Sequence Length:</strong> Reference sequences should be at least 1000 bases for best results.</li>
+            <li><strong>Multiple Sequences:</strong> Files can contain multiple sequences, but only the first one will be used as the reference.</li>
+        </ul>
+    </div>
+    
+    <!-- Naming Convention Section -->
+    <div class="naming-section" data-aos="fade-up" data-aos-delay="300">
+        <div class="naming-title">
+            <i class="fas fa-tag"></i> Naming Convention
+        </div>
+        <p>
+            The system will try to identify the species based on the filename. Include one of the following keywords in the filename for automatic identification:
+        </p>
+        <div class="species-tags">
+            <div class="species-tag species-tag-human">
+                <i class="fas fa-user"></i> human
+            </div>
+            <div class="species-tag species-tag-mouse">
+                <i class="fas fa-mouse"></i> mouse
+            </div>
+            <div class="species-tag species-tag-zebrafish">
+                <i class="fas fa-fish"></i> zebrafish
+            </div>
+            <div class="species-tag species-tag-arabidopsis">
+                <i class="fas fa-seedling"></i> arabidopsis
+            </div>
+            <div class="species-tag species-tag-ecoli">
+                <i class="fas fa-bacteria"></i> ecoli
+            </div>
+            <div class="species-tag species-tag-bsubtilis">
+                <i class="fas fa-bacteria"></i> bsubtilis
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("Add Reference page loaded");
+    
+    // Get DOM elements
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('referenceFile');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const removeFile = document.getElementById('removeFile');
+    const submitBtn = document.getElementById('submitBtn');
+    const referenceForm = document.getElementById('referenceForm');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+    
+    // Upload area click handler (excluding the file input)
+    uploadArea.addEventListener('click', function(e) {
+        // Check if the click is not on the file input container
+        if (!e.target.closest('.file-input-container')) {
+            console.log("Upload area clicked");
+            fileInput.click();
+        }
+    });
+    
+    // File input change handler
+    fileInput.addEventListener('change', function(e) {
+        console.log("File input changed");
+        if (e.target.files.length > 0) {
+            handleFileSelect(e.target.files[0]);
+        }
+    });
+    
+    // Remove file handler
+    removeFile.addEventListener('click', function(e) {
+        console.log("Remove file clicked");
+        e.preventDefault();
+        e.stopPropagation();
+        fileInput.value = '';
+        fileInfo.style.display = 'none';
+        submitBtn.disabled = true;
+        progressContainer.style.display = 'none';
+    });
+    
+    // Drag and drop handlers
+    uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+    
+    uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+    });
+    
+    uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            handleFileSelect(files[0]);
+        }
+    });
+    
+    // Form submission handler
+    referenceForm.addEventListener('submit', function(e) {
+        console.log("Form submitted");
+        
+        // Check if file is selected
+        if (fileInput.files.length === 0) {
+            e.preventDefault();
+            alert('Please select a file to upload.');
+            return;
+        }
+        
+        // Show progress bar
+        progressContainer.style.display = 'block';
+        
+        // Disable submit button to prevent multiple submissions
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Adding Reference...';
+        
+        // Let the form submit normally
+        // The browser will handle the file upload and redirect based on the server response
+    });
+    
+    // Function to handle file selection
+    function handleFileSelect(file) {
+        console.log("Handling file selection:", file.name);
+        
+        // Check file type
+        const allowedTypes = ['fasta', 'fa', 'fas', 'fna', 'ffn', 'faa', 'frn', 'txt'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        
+        if (!allowedTypes.includes(fileExtension)) {
+            alert('Invalid file type. Please upload a FASTA file (.fasta, .fa, .fas, .fna, .ffn, .faa, .frn) or plain text (.txt) file.');
+            fileInput.value = '';
+            return;
+        }
+        
+        // Check file size
+        const fileSizeInMB = file.size / (1024 * 1024);
+        const fileSizeInGB = fileSizeInMB / 1024;
+        
+        let fileSizeText = '';
+        if (fileSizeInGB >= 1) {
+            fileSizeText = `${fileSizeInGB.toFixed(2)} GB`;
+        } else {
+            fileSizeText = `${fileSizeInMB.toFixed(2)} MB`;
+        }
+        
+        if (file.size > 2 * 1024 * 1024 * 1024) {  // 2GB
+            alert('File is too large for analysis. Please use a file smaller than 2GB.');
+            fileInput.value = '';
+            return;
+        }
+        
+        // Display file info
+        fileName.textContent = file.name;
+        fileSize.textContent = `Size: ${fileSizeText}`;
+        fileInfo.style.display = 'flex';
+        submitBtn.disabled = false;
+    }
+});
+</script>
+{% endblock %}

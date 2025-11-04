@@ -1,0 +1,1074 @@
+{% extends "base.html" %}
+
+{% block title %}About - DNA Sequence Pattern Finderr{% endblock %}
+
+{% block head %}
+<style>
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.9), rgba(114, 9, 183, 0.9)), 
+                url('https://images.unsplash.com/photo-1530549387789-4c1017266635?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 120px 0 80px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('{{ url_for("static", filename="images/dna-pattern.png") }}') repeat;
+        opacity: 0.1;
+        z-index: 0;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    .hero-subtitle {
+        font-size: 1.5rem;
+        max-width: 800px;
+        margin: 0 auto 2rem;
+        opacity: 0.9;
+    }
+    
+    .dna-icon {
+        font-size: 4rem;
+        color: var(--info-color);
+        margin-bottom: 1.5rem;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+    
+    /* Section Styles */
+    .section {
+        padding: 80px 0;
+    }
+    
+    .section-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+    
+    .section-subtitle {
+        font-size: 1.2rem;
+        color: var(--dark-color);
+        opacity: 0.8;
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto 3rem;
+    }
+    
+    /* Feature Cards */
+    .feature-card {
+        border-radius: 15px;
+        border: none;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+        background: white;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .feature-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+        color: white;
+        position: relative;
+    }
+    
+    .feature-icon::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 50%;
+        background: inherit;
+        opacity: 0.2;
+        transform: scale(1.2);
+        z-index: -1;
+    }
+    
+    .feature-card:nth-child(1) .feature-icon {
+        background: linear-gradient(135deg, #4361ee, #3f37c9);
+    }
+    
+    .feature-card:nth-child(2) .feature-icon {
+        background: linear-gradient(135deg, #06ffa5, #00b4d8);
+    }
+    
+    .feature-card:nth-child(3) .feature-icon {
+        background: linear-gradient(135deg, #ffbe0b, #fb5607);
+    }
+    
+    .feature-card:nth-child(4) .feature-icon {
+        background: linear-gradient(135deg, #7209b7, #560bad);
+    }
+    
+    .feature-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+    
+    .feature-description {
+        color: var(--dark-color);
+        opacity: 0.8;
+        text-align: center;
+        padding: 0 1rem;
+    }
+    
+    /* Technology Cards */
+    .tech-card {
+        border-radius: 15px;
+        border: none;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+        background: white;
+        text-align: center;
+        padding: 2rem 1.5rem;
+    }
+    
+    .tech-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .tech-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+        color: white;
+        background: var(--gradient);
+    }
+    
+    .tech-name {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+    
+    .tech-description {
+        color: var(--dark-color);
+        opacity: 0.8;
+        font-size: 0.9rem;
+    }
+    
+    /* Team Cards */
+    .team-card {
+        border-radius: 15px;
+        border: none;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+        background: white;
+    }
+    
+    .team-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .team-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: white;
+        background: var(--gradient);
+    }
+    
+    .team-name {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+    
+    .team-role {
+        color: var(--info-color);
+        font-weight: 500;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+    
+    .team-description {
+        color: var(--dark-color);
+        opacity: 0.8;
+        text-align: center;
+        padding: 0 1.5rem 1.5rem;
+    }
+    
+    .team-social {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        padding-bottom: 1.5rem;
+    }
+    
+    .social-link {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        background: var(--gradient);
+        transition: all 0.3s ease;
+    }
+    
+    .social-link:hover {
+        transform: scale(1.1);
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+    }
+    
+    /* Process Timeline */
+    .process-timeline {
+        position: relative;
+        padding: 2rem 0;
+    }
+    
+    .process-timeline::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 100%;
+        background: var(--gradient);
+        border-radius: 2px;
+    }
+    
+    .process-item {
+        position: relative;
+        margin-bottom: 3rem;
+    }
+    
+    .process-item:nth-child(odd) .process-content {
+        margin-right: 50%;
+        padding-right: 2rem;
+        text-align: right;
+    }
+    
+    .process-item:nth-child(even) .process-content {
+        margin-left: 50%;
+        padding-left: 2rem;
+    }
+    
+    .process-dot {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: var(--gradient);
+        border: 4px solid white;
+        box-shadow: var(--shadow);
+        z-index: 1;
+    }
+    
+    .process-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+    
+    .process-description {
+        color: var(--dark-color);
+        opacity: 0.8;
+    }
+    
+    /* Contact Section */
+    .contact-section {
+        background: var(--gradient);
+        color: white;
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .contact-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('{{ url_for("static", filename="images/dna-pattern.png") }}') repeat;
+        opacity: 0.1;
+        z-index: 0;
+    }
+    
+    .contact-content {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+    }
+    
+    .contact-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    
+    .contact-subtitle {
+        font-size: 1.3rem;
+        opacity: 0.9;
+        max-width: 700px;
+        margin: 0 auto 2rem;
+    }
+    
+    .contact-form {
+        max-width: 600px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 2rem;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+    }
+    
+    .form-control, .form-select {
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1rem;
+        color: #333;
+        width: 100%;
+        display: block;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+        border-color: transparent;
+        outline: none;
+    }
+    
+    /* Ensure textarea is properly styled */
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+    
+    .btn-contact {
+        padding: 0.75rem 2rem;
+        border-radius: 30px;
+        font-weight: 600;
+        background: white;
+        color: var(--primary-color);
+        border: none;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .btn-contact:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
+    }
+    
+    .btn-contact:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+    
+    /* FAQ Section */
+    .faq-section {
+        padding: 80px 0;
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(114, 9, 183, 0.05));
+    }
+    
+    .faq-item {
+        background: white;
+        border-radius: 15px;
+        margin-bottom: 1rem;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+    }
+    
+    .faq-question {
+        padding: 1.5rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+    
+    .faq-question:hover {
+        background: rgba(67, 97, 238, 0.05);
+    }
+    
+    .faq-question.active {
+        background: rgba(67, 97, 238, 0.1);
+    }
+    
+    .faq-icon {
+        transition: transform 0.3s ease;
+    }
+    
+    .faq-question.active .faq-icon {
+        transform: rotate(180deg);
+    }
+    
+    .faq-answer {
+        padding: 0 1.5rem;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .faq-answer.active {
+        padding: 0 1.5rem 1.5rem;
+        max-height: 500px;
+    }
+    
+    /* Success Message Animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .success-message {
+        animation: fadeIn 0.5s ease-out;
+    }
+    
+    /* Loading spinner */
+    .spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255,255,255,.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    
+    /* Manual reset button */
+    .btn-reset {
+        margin-left: 10px;
+        padding: 0.75rem 1.5rem;
+        border-radius: 30px;
+        font-weight: 600;
+        background: #ff6b6b;
+        color: white;
+        border: none;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: none;
+    }
+    
+    .btn-reset:hover {
+        background: #ff5252;
+        transform: translateY(-2px);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+        }
+        
+        .process-timeline::before {
+            left: 20px;
+        }
+        
+        .process-item:nth-child(odd) .process-content,
+        .process-item:nth-child(even) .process-content {
+            margin-left: 50px;
+            margin-right: 0;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            text-align: left;
+        }
+        
+        .process-dot {
+            left: 20px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container hero-content">
+        <div class="dna-icon">
+            <i class="fas fa-dna"></i>
+        </div>
+        <h1 class="hero-title">About DNA Sequence Pattern Finder</h1>
+        <p class="hero-subtitle">Advanced DNA analysis with machine learning for accurate species identification</p>
+    </div>
+</section>
+
+<!-- Project Overview Section -->
+<section class="section">
+    <div class="container">
+        <h2 class="section-title" data-aos="fade-up">Project Overview</h2>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
+            Our DNA Pattern Sequence Finder is an advanced bioinformatics tool designed to analyze DNA sequences and identify their species of origin with high accuracy.
+        </p>
+        
+        <div class="row g-4">
+            <div class="col-md-6" data-aos="fade-right" data-aos-delay="200">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3 class="feature-title">Our Mission</h3>
+                    <p class="feature-description">
+                        To develop an AI-powered system that accurately identifies DNA sequences to their species of origin, helping researchers and biologists streamline their workflow and make more informed decisions.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-6" data-aos="fade-left" data-aos-delay="300">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="feature-title">Innovation</h3>
+                    <p class="feature-description">
+                        Our tool combines traditional bioinformatics methods with state-of-the-art machine learning algorithms to provide accurate and efficient DNA sequence analysis.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-6" data-aos="fade-right" data-aos-delay="400">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title">Impact</h3>
+                    <p class="feature-description">
+                        By automating species identification, we save researchers valuable time and reduce the potential for human error in DNA sequence classification.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-6" data-aos="fade-left" data-aos-delay="500">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="feature-title">Accessibility</h3>
+                    <p class="feature-description">
+                        We've designed our tool to be user-friendly and accessible to researchers with varying levels of bioinformatics expertise.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="section bg-light">
+    <div class="container">
+        <h2 class="section-title" data-aos="fade-up">How It Works</h2>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
+            Our DNA Pattern Sequence Finderr follows a systematic process to analyze and classify DNA sequences.
+        </p>
+        
+        <div class="process-timeline">
+            <div class="process-item" data-aos="fade-up" data-aos-delay="200">
+                <div class="process-dot"></div>
+                <div class="process-content">
+                    <h3 class="process-title">1. Sequence Upload</h3>
+                    <p class="process-description">
+                        Users upload DNA sequences in FASTA format through our intuitive web interface.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="process-item" data-aos="fade-up" data-aos-delay="300">
+                <div class="process-dot"></div>
+                <div class="process-content">
+                    <h3 class="process-title">2. Feature Extraction</h3>
+                    <p class="process-description">
+                        Our system extracts relevant features from the DNA sequences, including k-mer frequencies, GC content, and CpG ratios.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="process-item" data-aos="fade-up" data-aos-delay="400">
+                <div class="process-dot"></div>
+                <div class="process-content">
+                    <h3 class="process-title">3. Machine Learning Analysis</h3>
+                    <p class="process-description">
+                        The extracted features are fed into our trained Random Forest classifier for species prediction.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="process-item" data-aos="fade-up" data-aos-delay="500">
+                <div class="process-dot"></div>
+                <div class="process-content">
+                    <h3 class="process-title">4. Results Visualization</h3>
+                    <p class="process-description">
+                        Results are presented with confidence scores, detailed statistics, and interactive visualizations.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Technology Stack Section -->
+<section class="section">
+    <div class="container">
+        <h2 class="section-title" data-aos="fade-up">Technology Stack</h2>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
+            Our application is built with modern technologies to ensure reliability, performance, and maintainability.
+        </p>
+        
+        <div class="row g-4">
+            <div class="col-md-3 col-sm-6" data-aos="zoom-in" data-aos-delay="200">
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <h3 class="tech-name">Python</h3>
+                    <p class="tech-description">Core programming language for our backend and machine learning components.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6" data-aos="zoom-in" data-aos-delay="300">
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h3 class="tech-name">Flask</h3>
+                    <p class="tech-description">Lightweight web framework for our API and user interface.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6" data-aos="zoom-in" data-aos-delay="400">
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-dna"></i>
+                    </div>
+                    <h3 class="tech-name">Biopython</h3>
+                    <p class="tech-description">Bioinformatics library for DNA sequence processing and analysis.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6" data-aos="zoom-in" data-aos-delay="500">
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="tech-name">Scikit-learn</h3>
+                    <p class="tech-description">Machine learning library for our Random Forest classifier.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6" data-aos="zoom-in" data-aos-delay="600">
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fab fa-bootstrap"></i>
+                    </div>
+                    <h3 class="tech-name">Bootstrap</h3>
+                    <p class="tech-description">Frontend framework for responsive and modern UI design.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6" data-aos="zoom-in" data-aos-delay="700">
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3 class="tech-name">Chart.js</h3>
+                    <p class="tech-description">JavaScript library for interactive data visualization.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6" data-aos="zoom-in" data-aos-delay="800">
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3 class="tech-name">NCBI Database</h3>
+                    <p class="tech-description">Source of reference sequences for training our model.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6" data-aos="zoom-in" data-aos-delay="900">
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <h3 class="tech-name">Cloud Hosting</h3>
+                    <p class="tech-description">Scalable infrastructure for reliable service delivery.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section class="section bg-light">
+    <div class="container">
+        <h2 class="section-title" data-aos="fade-up">Our Team</h2>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
+            Meet the talented individuals behind the DNA Pattern Sequence Finder project.
+        </p>
+        
+        <div class="row g-4">
+            <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="team-card">
+                    <div class="team-avatar">
+                        NK
+                    </div>
+                    <h3 class="team-name">Nandana KM</h3>
+                    <p class="team-role">Bioinformatics Specialist</p>
+                    <p class="team-description">
+                        Responsible for dataset collection, parsing, preprocessing, and motif discovery. With expertise in molecular biology and computational analysis, Nandana ensures our biological data is accurately processed and interpreted.
+                    </p>
+                    <div class="team-social">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="team-card">
+                    <div class="team-avatar">
+                        SS
+                    </div>
+                    <h3 class="team-name">Saxon Sibi</h3>
+                    <p class="team-role">Machine Learning Engineer</p>
+                    <p class="team-description">
+                        Responsible for ML model development, mutation detection, visualization, and integration. With a strong background in data science and software engineering, Saxon brings our classification algorithms to life.
+                    </p>
+                    <div class="team-social">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="mailto:learnsaxon@gmail.com" class="social-link">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+    <div class="container">
+        <h2 class="section-title" data-aos="fade-up">Frequently Asked Questions</h2>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
+            Find answers to common questions about our DNA Species Classifier.
+        </p>
+        
+        <div class="faq-container">
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="200">
+                <div class="faq-question">
+                    <span>How accurate is the DNA Species Classifier?</span>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Our classifier achieves over 95% accuracy on test datasets. The accuracy may vary depending on the quality and length of the input DNA sequences. For best results, we recommend using sequences of at least 500 bases with minimal N characters.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="300">
+                <div class="faq-question">
+                    <span>Which species can the classifier identify?</span>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Currently, our classifier can identify DNA from six species: Human (Homo sapiens), Mouse (Mus musculus), Zebrafish (Danio rerio), Arabidopsis thaliana, E. coli (Escherichia coli), and B. subtilis (Bacillus subtilis). We plan to expand this list in future updates.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="400">
+                <div class="faq-question">
+                    <span>What file formats are supported?</span>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>We support standard FASTA formats (.fasta, .fa, .fna) and plain text files (.txt) containing DNA sequences. Files should contain only A, T, G, C characters (N characters will be ignored during processing).</p>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="500">
+                <div class="faq-question">
+                    <span>Is my data secure?</span>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, we take data security seriously. All uploaded sequences are processed temporarily and are not stored permanently on our servers. We do not use your data for any purpose other than providing the classification service.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="600">
+                <div class="faq-question">
+                    <span>Can I use the classifier for commercial purposes?</span>
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Our DNA Species Classifier is available for both academic and commercial use. However, we request that you cite our tool in any publications or research that utilizes our service. Please contact us for licensing information for large-scale commercial applications.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-section">
+    <div class="container contact-content">
+        <h2 class="contact-title" data-aos="fade-up">Get In Touch</h2>
+        <p class="contact-subtitle" data-aos="fade-up" data-aos-delay="100">
+            Have questions about our DNA Pattern Sequence Finder? We'd love to hear from you.
+        </p>
+        
+        <div class="contact-form" data-aos="fade-up" data-aos-delay="200">
+            <form id="contactForm">
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Your Email" required>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <input type="text" class="form-control" id="subject" name="subject" placeholder="Subject" required>
+                </div>
+                <div class="mt-3">
+                    <textarea class="form-control" id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
+                </div>
+                <div class="mt-4 text-center">
+                    <button type="submit" class="btn-contact" id="submitBtn">
+                        <i class="fas fa-paper-plane me-2"></i> Send Message
+                    </button>
+                    <button type="button" class="btn-reset" id="resetBtn">
+                        <i class="fas fa-redo me-2"></i> Reset
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="mt-5" data-aos="fade-up" data-aos-delay="300">
+            <h3>Other Ways to Reach Us</h3>
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-envelope me-3"></i>
+                        <span> info@dnaclassifier.com</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-phone me-3"></i>
+                        <span>+1 (123) 456-7890</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-map-marker-alt me-3"></i>
+                        <span>San Francisco, CA</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // FAQ Accordion
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', function() {
+            // Toggle active class
+            this.classList.toggle('active');
+            
+            // Toggle answer visibility
+            const answer = this.nextElementSibling;
+            answer.classList.toggle('active');
+        });
+    });
+    
+    // Contact form submission - Fixed version
+    const contactForm = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    
+    if (contactForm) {
+        // Global flag to prevent multiple submissions
+        let isSubmitting = false;
+        
+        // Function to reset button state
+        function resetButtonState() {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i> Send Message';
+            resetBtn.style.display = 'none';
+            isSubmitting = false;
+        }
+        
+        // Manual reset button handler
+        resetBtn.addEventListener('click', function() {
+            resetButtonState();
+        });
+        
+        // Form submission handler
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Prevent multiple submissions
+            if (isSubmitting) {
+                console.log('Form already submitting, ignoring...');
+                return;
+            }
+            
+            isSubmitting = true;
+            console.log('Form submission started');
+            
+            // Disable submit button and show loading
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner"></span> Sending...';
+            resetBtn.style.display = 'inline-block';
+            
+            // Get form data
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value
+            };
+            
+            console.log('Form data:', formData);
+            
+            // Show the global loading spinner from base.html
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            loadingSpinner.style.display = 'flex';
+            
+            // Simulate processing (replace with actual fetch)
+            setTimeout(() => {
+                // Hide the global loading spinner
+                loadingSpinner.style.display = 'none';
+                
+                // Show success message in the form container
+                const formContainer = contactForm.parentElement;
+                
+                // Create success message
+                const successHtml = `
+                    <div class="success-message text-center py-5">
+                        <i class="fas fa-check-circle fa-4x text-white mb-4"></i>
+                        <h3 class="text-white">Thank You!</h3>
+                        <p class="text-white">Your message has been sent successfully to learnsaxon@gmail.com. We'll get back to you soon.</p>
+                    </div>
+                `;
+                
+                // Replace form with success message
+                formContainer.innerHTML = successHtml;
+                
+                // Reset button state
+                resetButtonState();
+                
+                // Optional: Actually send the email
+                fetch('/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                }).catch(err => {
+                    console.log('Email sending failed:', err);
+                });
+                
+            }, 2000); // 2 second processing time
+        });
+    }
+});
+</script>
+{% endblock %}

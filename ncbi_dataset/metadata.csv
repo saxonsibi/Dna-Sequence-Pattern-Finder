@@ -1,0 +1,11 @@
+filename,species,kingdom,gc_content,sequence_length
+human_chr1_subset.fasta,Homo sapiens,Humans,50.2,248956422
+arabidopsis_chloroplast.fasta,Arabidopsis thaliana,Plants,36.3,154478
+mouse_mitochondrial.fasta,Mus musculus,Animals,40.0,16299
+zebrafish_mitochondrial.fasta,Danio rerio,Animals,45.6,16596
+ecoli_K12.fasta,Escherichia coli,Bacteria,50.8,4641652
+ecoli_O157.fasta,Escherichia coli,Bacteria,50.5,5528445
+ecoli_BL21.fasta,Escherichia coli,Bacteria,50.7,4558947
+ecoli_CFT073.fasta,Escherichia coli,Bacteria,50.6,5231428
+ecoli_536.fasta,Escherichia coli,Bacteria,50.9,4938920
+bsubtilis.fasta,Bacillus subtilis,Bacteria,43.5,4215606

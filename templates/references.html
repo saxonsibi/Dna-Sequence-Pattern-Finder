@@ -1,0 +1,558 @@
+{% extends "base.html" %}
+
+{% block title %}Reference Sequences - DNA Sequence Pattern Finder{% endblock %}
+
+{% block head %}
+<style>
+    /* References Container */
+    .references-container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    /* Header Section */
+    .header-section {
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(114, 9, 183, 0.05));
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+    }
+    
+    .header-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .header-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        color: white;
+        background: var(--gradient);
+        box-shadow: var(--shadow);
+    }
+    
+    .header-description {
+        color: var(--dark-color);
+        opacity: 0.8;
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .header-actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .btn-header {
+        padding: 0.75rem 1.5rem;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .btn-primary-header {
+        background: var(--gradient);
+        color: white;
+        border: none;
+    }
+    
+    .btn-primary-header:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);
+    }
+    
+    .btn-secondary-header {
+        background: transparent;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+    }
+    
+    .btn-secondary-header:hover {
+        background: var(--gradient);
+        color: white;
+        border-color: transparent;
+    }
+    
+    /* Reference Cards */
+    .reference-card {
+        border-radius: 15px;
+        border: none;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin-bottom: 1.5rem;
+        height: 100%;
+    }
+    
+    .reference-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .reference-header {
+        padding: 1.5rem;
+        position: relative;
+    }
+    
+    .reference-header-human {
+        background: linear-gradient(135deg, #4361ee, #3f37c9);
+    }
+    
+    .reference-header-mouse {
+        background: linear-gradient(135deg, #7209b7, #560bad);
+    }
+    
+    .reference-header-zebrafish {
+        background: linear-gradient(135deg, #06ffa5, #00b4d8);
+    }
+    
+    .reference-header-arabidopsis {
+        background: linear-gradient(135deg, #06ffa5, #00b4d8);
+    }
+    
+    .reference-header-ecoli {
+        background: linear-gradient(135deg, #ffbe0b, #fb5607);
+    }
+    
+    .reference-header-bsubtilis {
+        background: linear-gradient(135deg, #7209b7, #560bad);
+    }
+    
+    .reference-header-unknown {
+        background: linear-gradient(135deg, #6c757d, #495057);
+    }
+    
+    .reference-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+        background: rgba(255, 255, 255, 0.2);
+        margin-bottom: 1rem;
+    }
+    
+    /* Style for the SVG mouse icon */
+    .reference-icon svg {
+        width: 2rem; /* Increased from 1.5rem for bigger size */
+        height: 2rem;
+        fill: white; /* Same as icon color */
+    }
+    
+    .reference-title {
+        color: white;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    .reference-subtitle {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+    }
+    
+    .reference-body {
+        padding: 1.5rem;
+    }
+    
+    .reference-details {
+        margin-bottom: 1.5rem;
+    }
+    
+    .reference-detail-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.75rem;
+        color: var(--dark-color);
+    }
+    
+    .reference-detail-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        color: white;
+        background: var(--gradient);
+        margin-right: 1rem;
+    }
+    
+    .reference-detail-text {
+        flex-grow: 1;
+    }
+    
+    .reference-detail-label {
+        font-size: 0.8rem;
+        color: var(--dark-color);
+        opacity: 0.7;
+    }
+    
+    .reference-detail-value {
+        font-weight: 500;
+    }
+    
+    .reference-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .btn-reference {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .btn-delete {
+        background: rgba(251, 86, 7, 0.1);
+        color: var(--danger-color);
+        border: none;
+    }
+    
+    .btn-delete:hover {
+        background: var(--danger-color);
+        color: white;
+        transform: scale(1.05);
+    }
+    
+    .btn-download {
+        background: rgba(0, 180, 216, 0.1);
+        color: var(--info-color);
+        border: none;
+    }
+    
+    .btn-download:hover {
+        background: var(--info-color);
+        color: white;
+        transform: scale(1.05);
+    }
+    
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        border-radius: 15px;
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(114, 9, 183, 0.05));
+        box-shadow: var(--shadow);
+    }
+    
+    .empty-icon {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: white;
+        background: var(--gradient);
+        margin: 0 auto 2rem;
+    }
+    
+    .empty-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+    
+    .empty-description {
+        color: var(--dark-color);
+        opacity: 0.8;
+        margin-bottom: 2rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    /* Filter Section */
+    .filter-section {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+    }
+    
+    .filter-title {
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .filter-options {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+    
+    .filter-option {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        background: rgba(67, 97, 238, 0.05);
+        color: var(--primary-color);
+        border: 1px solid rgba(67, 97, 238, 0.2);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .filter-option:hover {
+        background: rgba(67, 97, 238, 0.1);
+    }
+    
+    .filter-option.active {
+        background: var(--gradient);
+        color: white;
+        border-color: transparent;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .header-title {
+            font-size: 2rem;
+        }
+        
+        .header-actions {
+            flex-direction: column;
+        }
+        
+        .btn-header {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .reference-actions {
+            flex-direction: column;
+        }
+        
+        .btn-reference {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5 references-container">
+    <!-- Header Section -->
+    <div class="header-section" data-aos="fade-up">
+        <div class="header-title">
+            <div class="header-icon">
+                <i class="fas fa-database"></i>
+            </div>
+            Reference Sequences
+        </div>
+        <p class="header-description">
+            Manage reference sequences for mutation analysis. Reference sequences are used as a baseline to compare against your uploaded DNA sequences.
+        </p>
+        <div class="header-actions">
+            <a href="{{ url_for('add_reference') }}" class="btn-header btn-primary-header">
+                <i class="fas fa-plus"></i> Add New Reference
+            </a>
+            <a href="{{ url_for('upload') }}" class="btn-header btn-secondary-header">
+                <i class="fas fa-arrow-left"></i> Back to Upload
+            </a>
+        </div>
+    </div>
+    
+    <!-- Filter Section -->
+    {% if references %}
+    <div class="filter-section" data-aos="fade-up" data-aos-delay="100">
+        <div class="filter-title">
+            <i class="fas fa-filter"></i> Filter by Species
+        </div>
+        <div class="filter-options">
+            <div class="filter-option active" data-filter="all">All</div>
+            <div class="filter-option" data-filter="human">Human</div>
+            <div class="filter-option" data-filter="mouse">Mouse</div>
+            <div class="filter-option" data-filter="zebrafish">Zebrafish</div>
+            <div class="filter-option" data-filter="arabidopsis">Arabidopsis</div>
+            <div class="filter-option" data-filter="ecoli">E. coli</div>
+            <div class="filter-option" data-filter="bsubtilis">B. subtilis</div>
+            <div class="filter-option" data-filter="unknown">Unknown</div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- References Grid -->
+    {% if references %}
+    <div class="row" id="referencesGrid">
+        {% for ref in references %}
+        {# This logic is now more robust and checks the filename directly #}
+        {% set filename_lower = ref.filename.lower() %}
+        {% set species_key = 'unknown' %}
+        
+        {% if 'ecoli' in filename_lower %}
+            {% set species_key = 'ecoli' %}
+        {% elif 'bsubtilis' in filename_lower %}
+            {% set species_key = 'bsubtilis' %}
+        {% elif 'human' in filename_lower %}
+            {% set species_key = 'human' %}
+        {% elif 'mouse' in filename_lower %}
+            {% set species_key = 'mouse' %}
+        {% elif 'zebrafish' in filename_lower %}
+            {% set species_key = 'zebrafish' %}
+        {% elif 'arabidopsis' in filename_lower %}
+            {% set species_key = 'arabidopsis' %}
+        {% elif 'drosophila' in filename_lower %}
+            {% set species_key = 'drosophila' %}
+        {% elif 'yeast' in filename_lower %}
+            {% set species_key = 'yeast' %}
+        {% endif %}
+        
+        <div class="col-md-6 col-lg-4 mb-4 reference-item" data-species="{{ species_key }}">
+            <div class="reference-card" data-aos="fade-up" data-aos-delay="{{ loop.index * 100 }}">
+                <div class="reference-header reference-header-{{ species_key }}">
+                    <div class="reference-icon">
+                        {% if 'human' in filename_lower %}
+                        <i class="fas fa-user"></i>
+                        {% elif 'mouse' in filename_lower %}
+                        <!-- Correct Animal Mouse Silhouette SVG Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M17.879904 8.827776C17.007839999999998 9.009744 16.240752 9.633312 15.198288 11.007408C14.504784 11.921616 13.893216 12.563088 13.715088 12.563088C13.652064000000001 12.563088 13.52472 12.416544 13.432224000000001 12.23736C13.150656 11.692272 12.399216000000001 10.930704 11.788512 10.571088C10.960128000000001 10.083456 10.085472000000001 9.842064 9.128352000000001 9.837024C8.399568 9.833088 8.300448 9.854735999999999 7.688784 10.152048C6.995424 10.489008 6.425952 10.622832 6.234144 10.493856000000001C6.142032 10.432032 6.13872 10.342704000000001 6.217728 10.049376C6.345312 9.575184 6.174336 9.26232 5.787552 9.26232C5.5356000000000005 9.26232 5.197488000000001 9.59664 5.062896 9.97896C5.005584 10.141824000000002 4.830336 10.189488 4.830336 10.042272C4.830336 9.993456 4.732872 9.909024 4.6136976 9.854735999999999C4.3184976 9.720096 4.049164800000001 9.9588 4.049164800000001 10.3548C4.049164800000001 10.597584 4.0083696 10.652448 3.7670687999999997 10.734048C3.4590240000000003 10.838112 2.4 11.803056 2.4 11.979648C2.4 12.039935999999999 2.5163952000000003 12.230592 2.658744 12.403344C2.9347632000000003 12.738384 3.115824 12.797952000000002 4.1084496 12.88032C4.623336 12.92304 4.662912 12.943728 5.084928000000001 13.390176C5.326848 13.646160000000002 5.524752 13.932623999999999 5.524752 14.026800000000001C5.524752 14.210064000000001 5.117376 14.600015999999998 4.830768 14.691024C4.6163904 14.759136000000002 4.6025903999999995 14.903424000000001 4.8086400000000005 14.922096000000002C5.106864 14.949167999999998 5.281872 14.905392 5.76888 14.682192C6.674304 14.267232 7.213632 14.095439999999998 7.614768 14.094287999999999C8.403936 14.092128 8.906112 14.506032000000001 8.61648 14.919839999999999C8.539152 15.030336 8.475888 15.149040000000001 8.475888 15.183696C8.475888 15.302208 9.163728 15.223152 9.189072 15.101808C9.205584 15.023184 9.385776 14.974656 9.734448 14.954736C10.246128 14.925552000000001 11.004576 14.666208 11.118768 14.481264C11.192064 14.362608 12.092496 14.356944 12.16512 14.47464C12.194928 14.522784 12.148368000000001 14.584176 12.061776 14.611199999999998C11.61936 14.749248000000001 11.51736 14.933904 11.8572 14.981952000000001C12.294096000000001 15.043584000000001 12.717696 14.836800000000002 12.904416 14.47056C13.000848 14.281392 13.118544 14.126591999999999 13.166015999999999 14.126591999999999C13.291680000000001 14.126591999999999 13.59624 13.593888000000002 13.596623999999998 13.373327999999999C13.596863999999998 13.237055999999999 13.676400000000001 13.158336 13.882800000000001 13.090176C14.259504 12.965760000000001 14.890944000000001 12.298176 15.709728 11.158464C16.81872 9.614832 17.490096 9.152016 18.631248 9.14448C19.11288 9.141264000000001 19.386672 9.187392000000001 19.683408 9.321744C20.185392 9.54888 20.70048 10.10616 20.837376000000003 10.350192C20.90352 10.48752 21.538848 11.657136 21.588863999999997 11.657136C21.688752 11.657136 21.088752 10.318224 20.90352 9.953568C20.743488 9.638352000000001 20.149968 9.187824 19.715376000000003 9.001392C19.270512 8.810544 18.370224 8.725344 17.879904 8.827776ZM9.88632 14.221824000000002C10.113072 14.2848 10.29864 14.361888 10.29864 14.393184C10.29864 14.471184000000001 9.324912000000001 14.865072000000001 9.229104 14.80584C9.18672 14.77968 9.170256 14.431152 9.170256 14.28504C9.170256 14.073264 9.201072 14.028336000000001 9.322128000000001 14.063376000000002C9.405744 14.087520000000001 9.659616 14.158848 9.88632 14.221824000000002Z" fill="currentColor"/>
+                        </svg>
+                        {% elif 'zebrafish' in filename_lower %}
+                        <i class="fas fa-fish"></i>
+                        {% elif 'arabidopsis' in filename_lower %}
+                        <i class="fas fa-seedling"></i>
+                        {% elif 'ecoli' in filename_lower %}
+                        <i class="fas fa-bacteria"></i>
+                        {% elif 'bsubtilis' in filename_lower %}
+                        <i class="fas fa-bacteria"></i>
+                        {% else %}
+                        <i class="fas fa-dna"></i>
+                        {% endif %}
+                    </div>
+                    <div class="reference-title">{{ ref.filename }}</div>
+                    <div class="reference-subtitle">{{ identify_species(ref.filename) }}</div>
+                </div>
+                <div class="reference-body">
+                    <div class="reference-details">
+                        <div class="reference-detail-item">
+                            <div class="reference-detail-icon">
+                                <i class="fas fa-hdd"></i>
+                            </div>
+                            <div class="reference-detail-text">
+                                <div class="reference-detail-label">File Size</div>
+                                <div class="reference-detail-value">{{ "{:,}".format(ref.size) }} bytes</div>
+                            </div>
+                        </div>
+                        <div class="reference-detail-item">
+                            <div class="reference-detail-icon">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                            <div class="reference-detail-text">
+                                <div class="reference-detail-label">Upload Date</div>
+                                <div class="reference-detail-value">{{ ref.upload_time }}</div>
+                            </div>
+                        </div>
+                        <div class="reference-detail-item">
+                            <div class="reference-detail-icon">
+                                <i class="fas fa-dna"></i>
+                            </div>
+                            <div class="reference-detail-text">
+                                <div class="reference-detail-label">Species Type</div>
+                                <div class="reference-detail-value">{{ identify_species(ref.filename) }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="reference-actions">
+                        <form method="POST" action="{{ url_for('delete_reference', ref_name=ref.filename) }}" onsubmit="return confirm('Are you sure you want to delete this reference sequence? This action cannot be undone.')" style="display: inline;">
+                            <button type="submit" class="btn-reference btn-delete">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="empty-state" data-aos="fade-up">
+        <div class="empty-icon">
+            <i class="fas fa-database"></i>
+        </div>
+        <h2 class="empty-title">No Reference Sequences Found</h2>
+        <p class="empty-description">
+            You haven't added any reference sequences yet. Reference sequences are used as a baseline for mutation analysis. Add your first reference sequence to get started.
+        </p>
+        <a href="{{ url_for('add_reference') }}" class="btn-header btn-primary-header">
+            <i class="fas fa-plus"></i> Add Your First Reference
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Filter functionality
+    const filterOptions = document.querySelectorAll('.filter-option');
+    const referenceItems = document.querySelectorAll('.reference-item');
+    
+    filterOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            // Update active state
+            filterOptions.forEach(opt => opt.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Filter references
+            const filter = this.dataset.filter;
+            
+            referenceItems.forEach(item => {
+                if (filter === 'all' || item.dataset.species === filter) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+    
+    // Add smooth animations
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    document.querySelectorAll('.reference-card').forEach(card => {
+        observer.observe(card);
+    });
+});
+</script>
+{% endblock %}

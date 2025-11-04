@@ -1,0 +1,969 @@
+{% extends "base.html" %}
+
+{% block title %}Analyze DNA Sequence - DNA Sequence Pattern Finder{% endblock %}
+
+{% block head %}
+<style>
+    /* Upload Section Styles */
+    .upload-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    
+    .upload-area {
+        border: 3px dashed rgba(67, 97, 238, 0.5);
+        border-radius: 20px;
+        padding: 60px 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(114, 9, 183, 0.05));
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .upload-area::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('{{ url_for("static", filename="images/dna-pattern.png") }}') repeat;
+        opacity: 0.05;
+        z-index: 0;
+    }
+    
+    .upload-area:hover {
+        border-color: var(--primary-color);
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(67, 97, 238, 0.2);
+    }
+    
+    .upload-area.dragover {
+        border-color: var(--success-color);
+        background: linear-gradient(135deg, rgba(6, 255, 165, 0.1), rgba(0, 180, 216, 0.1));
+    }
+    
+    .upload-content {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .upload-icon {
+        font-size: 4rem;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+    
+    /* Analysis Options */
+    .analysis-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+    
+    .analysis-option {
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        box-shadow: var(--shadow);
+    }
+    
+    .analysis-option:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .analysis-option.selected {
+        border: 2px solid var(--primary-color);
+        box-shadow: 0 0 0 5px rgba(67, 97, 238, 0.2);
+    }
+    
+    .analysis-option .card-body {
+        padding: 2rem 1.5rem;
+        text-align: center;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .analysis-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.8rem;
+        color: white;
+        position: relative;
+    }
+    
+    .analysis-icon::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 50%;
+        background: inherit;
+        opacity: 0.2;
+        transform: scale(1.2);
+        z-index: -1;
+    }
+    
+    .analysis-option:nth-child(1) .analysis-icon {
+        background: linear-gradient(135deg, #4361ee, #3f37c9);
+    }
+    
+    .analysis-option:nth-child(2) .analysis-icon {
+        background: linear-gradient(135deg, #06ffa5, #00b4d8);
+    }
+    
+    .analysis-option:nth-child(3) .analysis-icon {
+        background: linear-gradient(135deg, #ffbe0b, #fb5607);
+    }
+    
+    .analysis-option:nth-child(4) .analysis-icon {
+        background: linear-gradient(135deg, #7209b7, #560bad);
+    }
+    
+    /* File Info Display */
+    .file-info-display {
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
+        border: 1px solid rgba(67, 97, 238, 0.3);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .file-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        background: var(--gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+    }
+    
+    .file-details {
+        flex-grow: 1;
+    }
+    
+    .file-name {
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 0.25rem;
+    }
+    
+    .file-size {
+        color: var(--dark-color);
+        opacity: 0.7;
+        font-size: 0.9rem;
+    }
+    
+    .remove-file {
+        background: rgba(251, 86, 7, 0.1);
+        color: var(--danger-color);
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+    
+    .remove-file:hover {
+        background: var(--danger-color);
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    /* Reference Selection */
+    .reference-selection {
+        background: rgba(0, 180, 216, 0.05);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+        border: 1px solid rgba(0, 180, 216, 0.2);
+    }
+    
+    .reference-list {
+        max-height: 300px;
+        overflow-y: auto;
+        border-radius: 10px;
+        background: white;
+        box-shadow: var(--shadow);
+    }
+    
+    .reference-item {
+        padding: 1rem;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+    
+    .reference-item:last-child {
+        border-bottom: none;
+    }
+    
+    .reference-item:hover {
+        background: rgba(67, 97, 238, 0.05);
+    }
+    
+    .reference-item.selected {
+        background: rgba(67, 97, 238, 0.1);
+        border-left: 4px solid var(--primary-color);
+    }
+    
+    .reference-info {
+        flex-grow: 1;
+    }
+    
+    .reference-name {
+        font-weight: 500;
+        color: var(--dark-color);
+    }
+    
+    .reference-species {
+        font-size: 0.85rem;
+        color: var(--dark-color);
+        opacity: 0.7;
+    }
+    
+    .reference-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .btn-select-reference {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-select-reference:hover {
+        background: var(--secondary-color);
+        transform: scale(1.1);
+    }
+    
+    .btn-delete-reference {
+        background: rgba(251, 86, 7, 0.1);
+        color: var(--danger-color);
+        border: none;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-delete-reference:hover {
+        background: var(--danger-color);
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    /* Submit Button */
+    .submit-section {
+        text-align: center;
+        margin-top: 2rem;
+    }
+    
+    .btn-analyze {
+        padding: 0.75rem 3rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        border-radius: 30px;
+        background: var(--gradient);
+        color: white;
+        border: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .btn-analyze::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: all 0.5s ease;
+    }
+    
+    .btn-analyze:hover::before {
+        left: 100%;
+    }
+    
+    .btn-analyze:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);
+    }
+    
+    .btn-analyze:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+    
+    /* File Guidelines */
+    .file-guidelines {
+        background: linear-gradient(135deg, rgba(255, 190, 11, 0.1), rgba(251, 86, 7, 0.1));
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        border: 1px solid rgba(255, 190, 11, 0.3);
+    }
+    
+    .guidelines-title {
+        color: var(--warning-color);
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .guidelines-list {
+        margin: 0;
+        padding-left: 1.5rem;
+    }
+    
+    .guidelines-list li {
+        margin-bottom: 0.5rem;
+        color: var(--dark-color);
+    }
+    
+    /* Modal Styles */
+    .modal-content {
+        border-radius: 15px;
+        border: none;
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .modal-header {
+        background: var(--gradient);
+        color: white;
+        border-radius: 15px 15px 0 0;
+        border: none;
+    }
+    
+    .modal-header .btn-close {
+        filter: invert(1);
+    }
+    
+    /* Loading Spinner */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+    
+    .loading-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        max-width: 400px;
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .dna-spinner {
+        width: 80px;
+        height: 80px;
+        position: relative;
+        margin: 0 auto 1.5rem;
+    }
+    
+    .dna-spinner span {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--gradient);
+        animation: dna 2s infinite ease-in-out;
+    }
+    
+    .dna-spinner span:nth-child(1) { left: 0; top: 0; animation-delay: 0s; }
+    .dna-spinner span:nth-child(2) { left: 20px; top: 10px; animation-delay: 0.2s; }
+    .dna-spinner span:nth-child(3) { left: 40px; top: 0; animation-delay: 0.4s; }
+    .dna-spinner span:nth-child(4) { left: 20px; top: 20px; animation-delay: 0.6s; }
+    .dna-spinner span:nth-child(5) { left: 0; top: 30px; animation-delay: 0.8s; }
+    .dna-spinner span:nth-child(6) { left: 20px; top: 40px; animation-delay: 1s; }
+    .dna-spinner span:nth-child(7) { left: 40px; top: 30px; animation-delay: 1.2s; }
+    
+    @keyframes dna {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.5); opacity: 0.7; }
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .upload-area {
+            padding: 40px 15px;
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+        }
+        
+        .analysis-options {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .analysis-option .card-body {
+            padding: 1.5rem 1rem;
+        }
+        
+        .analysis-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold" data-aos="fade-up">Analyze DNA Sequences</h1>
+        <p class="lead text-muted" data-aos="fade-up" data-aos-delay="100">Upload your FASTA files and select the type of analysis you want to perform</p>
+    </div>
+    
+    <div class="upload-container">
+        <!-- File Upload Form -->
+        <form id="uploadForm" method="POST" action="{{ url_for('analyze') }}" enctype="multipart/form-data">
+            <!-- File Upload -->
+            <div class="card shadow-sm border-0" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-body p-4">
+                    <h5 class="card-title mb-4">Upload DNA Sequence File</h5>
+                    
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-content">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <h5>Drag & Drop your FASTA file here</h5>
+                            <p class="text-muted">or click to browse</p>
+                            <input type="file" id="fileInput" name="dna_file" accept=".fasta,.fa,.txt" style="display: none;" required>
+                            <button type="button" class="btn btn-primary mt-3" id="browseButton">
+                                <i class="fas fa-folder-open me-2"></i> Browse Files
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="fileInfo" class="file-info-display" style="display: none;">
+                        <div class="file-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="file-details">
+                            <div class="file-name" id="fileName"></div>
+                            <div class="file-size" id="fileSize"></div>
+                        </div>
+                        <button type="button" class="remove-file" id="removeFile">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Analysis Options -->
+            <div class="card shadow-sm border-0 mt-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="card-body p-4">
+                    <h5 class="card-title mb-4">Select Analysis Type</h5>
+                    
+                    <!-- Hidden input for analysis type -->
+                    <input type="hidden" id="analysisType" name="analysis_type" value="">
+                    
+                    <div class="analysis-options">
+                        <div class="analysis-option card" data-analysis="classification">
+                            <div class="card-body">
+                                <div class="analysis-icon">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <h6>Species Classification</h6>
+                                <small class="text-muted">Identify species using ML</small>
+                            </div>
+                        </div>
+                        
+                        <div class="analysis-option card" data-analysis="basic">
+                            <div class="card-body">
+                                <div class="analysis-icon">
+                                    <i class="fas fa-chart-bar"></i>
+                                </div>
+                                <h6>Basic Analysis</h6>
+                                <small class="text-muted">GC content, composition</small>
+                            </div>
+                        </div>
+                        
+                        <div class="analysis-option card" data-analysis="motif">
+                            <div class="card-body">
+                                <div class="analysis-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <h6>Motif Discovery</h6>
+                                <small class="text-muted">Find conserved patterns</small>
+                            </div>
+                        </div>
+                        
+                        <div class="analysis-option card" data-analysis="mutation">
+                            <div class="card-body">
+                                <div class="analysis-icon">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                                <h6>Mutation Analysis</h6>
+                                <small class="text-muted">Compare with reference</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Reference Selection (for mutation analysis) -->
+                    <div id="referenceSelection" class="reference-selection" style="display: none;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <label class="form-label mb-0 fw-bold">Select Reference Sequence:</label>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addReferenceModal">
+                                <i class="fas fa-plus me-1"></i>Add New Reference
+                            </button>
+                        </div>
+                        
+                        <div class="reference-list" id="referenceList">
+                            <div class="text-center p-3 text-muted">
+                                <i class="fas fa-spinner fa-spin me-2"></i>Loading references...
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <div class="submit-section">
+                        <button type="submit" id="analyzeBtn" class="btn-analyze" disabled>
+                            <i class="fas fa-play me-2"></i> Analyze Sequence
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- File Guidelines -->
+            <div class="file-guidelines" data-aos="fade-up" data-aos-delay="400">
+                <div class="guidelines-title">
+                    <i class="fas fa-info-circle"></i> File Guidelines
+                </div>
+                <ul class="guidelines-list">
+                    <li><strong>Maximum file size:</strong> 2GB</li>
+                    <li><strong>Maximum sequences processed:</strong> 5,000 sequences per file</li>
+                    <li><strong>Supported formats:</strong> FASTA (.fasta, .fa), TXT (.txt)</li>
+                    <li><strong>Processing time:</strong> Large files may take several minutes to process</li>
+                    <li><strong>Sequence requirements:</strong> Minimum 500 bases for best classification results</li>
+                </ul>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add Reference Modal -->
+<div class="modal fade" id="addReferenceModal" tabindex="-1" aria-labelledby="addReferenceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addReferenceModalLabel">Add Reference Sequence</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="addReferenceForm" method="POST" action="{{ url_for('add_reference') }}" enctype="multipart/form-data" class="no-global-spinner">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="referenceFile" class="form-label">FASTA File</label>
+                        <input type="file" class="form-control" id="referenceFile" name="reference_file" required>
+                        <div class="form-text">Select a FASTA file to add as a reference sequence.</div>
+                    </div>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        The system will try to identify the species based on the filename. Include one of the following in the filename for automatic identification: ecoli, human, mouse, zebrafish, arabidopsis.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Reference</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+        <div class="dna-spinner">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <h5>Processing Your File</h5>
+        <p class="text-muted">This may take several minutes for large files...</p>
+        <p class="text-muted small">Please wait while we analyze your DNA sequences.</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const browseButton = document.getElementById('browseButton');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const removeFile = document.getElementById('removeFile');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const analysisOptions = document.querySelectorAll('.analysis-option');
+    const referenceSelection = document.getElementById('referenceSelection');
+    const analysisType = document.getElementById('analysisType');
+    const uploadForm = document.getElementById('uploadForm');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const referenceList = document.getElementById('referenceList');
+    const addReferenceForm = document.getElementById('addReferenceForm');
+    const globalSpinner = document.getElementById('loadingSpinner');
+    
+    let selectedAnalysis = null;
+    let selectedReference = null;
+    
+    // Function to hide the global spinner
+    function hideGlobalSpinner() {
+        if (globalSpinner) {
+            globalSpinner.style.display = 'none';
+        }
+    }
+    
+    // Load references from the server
+    function loadReferences() {
+        fetch('/api/references')
+            .then(response => response.json())
+            .then(data => {
+                renderReferences(data.references);
+            })
+            .catch(error => {
+                console.error('Error loading references:', error);
+                referenceList.innerHTML = '<div class="p-3 text-center text-danger">Error loading references. Please try again.</div>';
+            });
+    }
+    
+    // Render references in the list
+    function renderReferences(references) {
+        referenceList.innerHTML = '';
+        
+        if (references.length === 0) {
+            referenceList.innerHTML = '<div class="p-3 text-center text-muted">No reference sequences available. Add one to get started.</div>';
+            return;
+        }
+        
+        references.forEach(ref => {
+            const refItem = document.createElement('div');
+            refItem.className = 'reference-item';
+            refItem.innerHTML = `
+                <div class="reference-info">
+                    <div class="reference-name">${ref.filename}</div>
+                    <div class="reference-species">${ref.species}</div>
+                </div>
+                <div class="reference-actions">
+                    <button type="button" class="btn-select-reference" data-reference="${ref.filename}" title="Select">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <button type="button" class="btn-delete-reference" data-reference="${ref.filename}" title="Delete">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            referenceList.appendChild(refItem);
+        });
+        
+        // Add event listeners to the new buttons
+        document.querySelectorAll('.btn-select-reference').forEach(btn => {
+            btn.addEventListener('click', function() {
+                selectReference(this.dataset.reference);
+            });
+        });
+        
+        document.querySelectorAll('.btn-delete-reference').forEach(btn => {
+            btn.addEventListener('click', function() {
+                deleteReference(this.dataset.reference);
+            });
+        });
+    }
+    
+    // Select a reference
+    function selectReference(refName) {
+        selectedReference = refName;
+        
+        // Update UI to show selected reference
+        document.querySelectorAll('.reference-item').forEach(item => {
+            item.classList.remove('selected');
+        });
+        
+        document.querySelector(`[data-reference="${refName}"]`).closest('.reference-item').classList.add('selected');
+        
+        // Create hidden input for form submission
+        let refInput = document.getElementById('selectedReference');
+        if (!refInput) {
+            refInput = document.createElement('input');
+            refInput.type = 'hidden';
+            refInput.id = 'selectedReference';
+            refInput.name = 'reference_file';
+            referenceSelection.appendChild(refInput);
+        }
+        refInput.value = refName;
+        
+        checkFormValidity();
+    }
+    
+    // Delete a reference
+    function deleteReference(refName) {
+        if (confirm(`Are you sure you want to delete ${refName}?`)) {
+            fetch(`/api/references/${refName}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    loadReferences(); // Reload the list
+                    if (selectedReference === refName) {
+                        selectedReference = null;
+                        checkFormValidity();
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting reference:', error);
+                alert('Error deleting reference');
+            });
+        }
+    }
+    
+    // Handle add reference form submission
+    addReferenceForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Adding...';
+        
+        fetch('/api/references', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.error || 'Server error');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Close modal and reset form
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addReferenceModal'));
+            modal.hide();
+            this.reset();
+            
+            // Reload references
+            loadReferences();
+            
+            // Show success message
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success alert-dismissible fade show';
+            alertDiv.innerHTML = `
+                <i class="fas fa-check-circle me-2"></i>
+                Reference sequence added successfully!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            
+            // Insert the alert at the top of the modal container
+            const modalContainer = document.querySelector('.modal-dialog');
+            modalContainer.parentNode.insertBefore(alertDiv, modalContainer);
+            
+            // Auto-remove the alert after 5 seconds
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        })
+        .catch(error => {
+            console.error('Error adding reference:', error);
+            alert('Error adding reference: ' + error.message);
+        })
+        .finally(() => {
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+        });
+    });
+    
+    // File upload handlers
+    browseButton.addEventListener('click', function(e) {
+        e.stopPropagation();
+        fileInput.click();
+    });
+    
+    uploadArea.addEventListener('click', () => fileInput.click());
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            handleFileSelect(files[0]);
+        }
+    });
+    
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleFileSelect(e.target.files[0]);
+        }
+    });
+    
+    removeFile.addEventListener('click', function() {
+        fileInput.value = '';
+        fileInfo.style.display = 'none';
+        checkFormValidity();
+    });
+    
+    function handleFileSelect(file) {
+        // Check file size
+        const fileSizeInMB = file.size / (1024 * 1024);
+        const fileSizeInGB = fileSizeInMB / 1024;
+        
+        let fileSizeText = '';
+        if (fileSizeInGB >= 1) {
+            fileSizeText = `${fileSizeInGB.toFixed(2)} GB`;
+        } else {
+            fileSizeText = `${fileSizeInMB.toFixed(2)} MB`;
+        }
+        
+        if (file.size > 2 * 1024 * 1024 * 1024) {  // 2GB
+            alert('File is too large for analysis. Please use a file smaller than 2GB.');
+            fileInput.value = ''; // Clear the file input
+            return;
+        }
+        
+        fileName.textContent = file.name;
+        fileSize.textContent = `Size: ${fileSizeText}`;
+        fileInfo.style.display = 'flex';
+        checkFormValidity();
+    }
+    
+    // Analysis selection
+    analysisOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            analysisOptions.forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+            selectedAnalysis = option.dataset.analysis;
+            analysisType.value = selectedAnalysis;
+            
+            // Show/hide reference selection
+            if (selectedAnalysis === 'mutation') {
+                referenceSelection.style.display = 'block';
+                // Load references if not already loaded
+                if (referenceList.children.length === 0 || referenceList.querySelector('.fa-spinner')) {
+                    loadReferences();
+                }
+            } else {
+                referenceSelection.style.display = 'none';
+            }
+            
+            checkFormValidity();
+        });
+    });
+    
+    function checkFormValidity() {
+        const isValid = fileInput.files.length > 0 && selectedAnalysis && 
+                         (selectedAnalysis !== 'mutation' || selectedReference);
+        analyzeBtn.disabled = !isValid;
+    }
+    
+    // Add loading state when form is submitted
+    uploadForm.addEventListener('submit', function() {
+        // Show loading overlay
+        loadingOverlay.style.display = 'flex';
+        
+        // Update button state
+        analyzeBtn.disabled = true;
+        analyzeBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Processing...';
+        
+        // The form will submit normally and the browser will handle the response
+        // The loading overlay will remain visible until the page navigates away
+    });
+    
+    // Hide global spinner when page loads
+    hideGlobalSpinner();
+    
+    // Also hide global spinner when the modal is closed
+    document.getElementById('addReferenceModal').addEventListener('hidden.bs.modal', function () {
+        hideGlobalSpinner();
+    });
+});
+</script>
+{% endblock %}

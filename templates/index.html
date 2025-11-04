@@ -1,0 +1,451 @@
+{% extends "base.html" %}
+
+{% block title %}Home - DNA Sequence Pattern Finder{% endblock %}
+
+{% block head %}
+<style>
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.9), rgba(114, 9, 183, 0.9)), 
+                    url('https://images.unsplash.com/photo-1530549387789-4c1017266635?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 120px 0 80px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('{{ url_for("static", filename="images/dna-pattern.png") }}') repeat;
+        opacity: 0.1;
+        z-index: 0;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    .hero-subtitle {
+        font-size: 1.5rem;
+        max-width: 800px;
+        margin: 0 auto 2rem;
+        opacity: 0.9;
+    }
+    
+    .dna-icon {
+        font-size: 4rem;
+        color: var(--info-color);
+        margin-bottom: 1.5rem;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+    
+    /* Feature Cards */
+    .feature-card {
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+        box-shadow: var(--shadow);
+        position: relative;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .feature-card .card-body {
+        padding: 2rem;
+        text-align: center;
+    }
+    
+    .feature-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+        color: white;
+        position: relative;
+    }
+    
+    .feature-icon::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 50%;
+        background: inherit;
+        opacity: 0.2;
+        transform: scale(1.2);
+        z-index: -1;
+    }
+    
+    .feature-card:nth-child(1) .feature-icon {
+        background: linear-gradient(135deg, #4361ee, #3f37c9);
+    }
+    
+    .feature-card:nth-child(2) .feature-icon {
+        background: linear-gradient(135deg, #06ffa5, #00b4d8);
+    }
+    
+    .feature-card:nth-child(3) .feature-icon {
+        background: linear-gradient(135deg, #ffbe0b, #fb5607);
+    }
+    
+    .feature-card:nth-child(4) .feature-icon {
+        background: linear-gradient(135deg, #7209b7, #560bad);
+    }
+    
+    /* Stats Section */
+    .stats-section {
+        background: linear-gradient(135deg, #f5f7fb, #e9ecef);
+        padding: 80px 0;
+        position: relative;
+    }
+    
+    .stats-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: var(--gradient);
+    }
+    
+    .stat-item {
+        text-align: center;
+        padding: 2rem 1rem;
+        position: relative;
+    }
+    
+    .stat-icon {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2.5rem;
+        color: white;
+        position: relative;
+        background: var(--gradient);
+        box-shadow: var(--shadow);
+    }
+    
+    .stat-number {
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+        font-size: 1.2rem;
+        color: var(--dark-color);
+        font-weight: 500;
+    }
+    
+    /* Species Section */
+    .species-section {
+        padding: 80px 0;
+    }
+    
+    .species-badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        margin: 0.25rem;
+        border-radius: 30px;
+        font-weight: 500;
+        color: white;
+        transition: all 0.3s ease;
+    }
+    
+    .species-badge:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .species-human { background: linear-gradient(135deg, #4361ee, #3f37c9); }
+    .species-mouse { background: linear-gradient(135deg, #7209b7, #560bad); }
+    .species-zebrafish { background: linear-gradient(135deg, #06ffa5, #00b4d8); }
+    .species-arabidopsis { background: linear-gradient(135deg, #06ffa5, #00b4d8); }
+    .species-ecoli { background: linear-gradient(135deg, #ffbe0b, #fb5607); }
+    .species-bsubtilis { background: linear-gradient(135deg, #7209b7, #560bad); }
+    
+    /* CTA Section */
+    .cta-section {
+        background: var(--gradient);
+        padding: 80px 0;
+        color: white;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .cta-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('{{ url_for("static", filename="images/dna-pattern.png") }}') repeat;
+        opacity: 0.1;
+        z-index: 0;
+    }
+    
+    .cta-content {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .cta-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+    }
+    
+    .cta-subtitle {
+        font-size: 1.3rem;
+        max-width: 700px;
+        margin: 0 auto 2rem;
+        opacity: 0.9;
+    }
+    
+    .btn-cta {
+        padding: 0.75rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 30px;
+        background: white;
+        color: var(--primary-color);
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .btn-cta:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        background: var(--light-color);
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+        }
+        
+        .cta-title {
+            font-size: 2rem;
+        }
+        
+        .feature-card .card-body {
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container hero-content">
+        <div class="dna-icon">
+            <i class="fas fa-dna"></i>
+        </div>
+        <h1 class="hero-title">DNA Sequence Pattern Finder</h1>
+        <p class="hero-subtitle">Advanced DNA analysis with machine learning for accurate species identification</p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('upload') }}" class="btn btn-light btn-lg me-3" data-aos="fade-up" data-aos-delay="100">
+                <i class="fas fa-microscope me-2"></i> Start Analysis
+            </a>
+            <a href="{{ url_for('about') }}" class="btn btn-outline-light btn-lg" data-aos="fade-up" data-aos-delay="200">
+                <i class="fas fa-info-circle me-2"></i> Learn More
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold" data-aos="fade-up">Key Features</h2>
+            <p class="lead text-muted" data-aos="fade-up" data-aos-delay="100">Powerful tools for comprehensive DNA analysis</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+                <div class="card feature-card shadow h-100">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-dna"></i>
+                        </div>
+                        <h5 class="card-title">Species Classification</h5>
+                        <p class="card-text">Identify the species of DNA sequences using advanced machine learning algorithms with high accuracy.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+                <div class="card feature-card shadow h-100">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h5 class="card-title">Basic Analysis</h5>
+                        <p class="card-text">Comprehensive DNA sequence analysis with GC content calculation and nucleotide composition.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+                <div class="card feature-card shadow h-100">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h5 class="card-title">Motif Discovery</h5>
+                        <p class="card-text">Discover conserved motifs and patterns in DNA sequences using advanced algorithms.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
+                <div class="card feature-card shadow h-100">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h5 class="card-title">Mutation Analysis</h5>
+                        <p class="card-text">Detect and analyze mutations between different DNA sequences with high accuracy.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold" data-aos="fade-up">Project Statistics</h2>
+            <p class="lead text-muted" data-aos="fade-up" data-aos-delay="100">Our classifier's performance metrics</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-3 col-6" data-aos="zoom-in" data-aos-delay="100">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="stat-number">6+</div>
+                    <div class="stat-label">Species Supported</div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-6" data-aos="zoom-in" data-aos-delay="200">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-number">95%+</div>
+                    <div class="stat-label">Classification Accuracy</div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-6" data-aos="zoom-in" data-aos-delay="300">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <div class="stat-number">4,096</div>
+                    <div class="stat-label">K-mer Features</div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-6" data-aos="zoom-in" data-aos-delay="400">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                    <div class="stat-number">200+</div>
+                    <div class="stat-label">Test Sequences</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Supported Species Section -->
+{% if species_list %}
+<section class="species-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold" data-aos="fade-up">Supported Species</h2>
+            <p class="lead text-muted" data-aos="fade-up" data-aos-delay="100">Our classifier can identify DNA from these species</p>
+        </div>
+        
+        <div class="text-center" data-aos="fade-up" data-aos-delay="200">
+            {% for species in species_list %}
+            <span class="species-badge species-{{ species.lower().replace(' ', '_').replace('.', '') }}">
+                <i class="fas fa-dna me-2"></i>{{ species }}
+            </span>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container cta-content">
+        <h2 class="cta-title" data-aos="fade-up">Ready to Analyze Your DNA Sequences?</h2>
+        <p class="cta-subtitle" data-aos="fade-up" data-aos-delay="100">Upload your FASTA files and get instant results with our advanced analysis tools.</p>
+        <a href="{{ url_for('upload') }}" class="btn-cta" data-aos="fade-up" data-aos-delay="200">
+            <i class="fas fa-rocket me-2"></i> Get Started Now
+        </a>
+    </div>
+</section>
+{% endblock %}

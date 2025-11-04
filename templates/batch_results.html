@@ -1,0 +1,941 @@
+{% extends "base.html" %}
+
+{% block title %}Batch Classification Results - DNA Sequence Pattern Finder{% endblock %}
+
+{% block head %}
+<style>
+    /* Results Container */
+    .results-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    /* Header Section */
+    .header-section {
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(114, 9, 183, 0.05));
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+    }
+    
+    .header-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .header-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        color: white;
+        background: var(--gradient);
+        box-shadow: var(--shadow);
+    }
+    
+    .header-description {
+        color: var(--dark-color);
+        opacity: 0.8;
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .header-stats {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .header-stat {
+        text-align: center;
+        padding: 1rem;
+        border-radius: 10px;
+        background: white;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        min-width: 150px;
+    }
+    
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+    
+    .stat-label {
+        color: var(--dark-color);
+        opacity: 0.7;
+        font-size: 0.9rem;
+    }
+    
+    /* Filter Section */
+    .filter-section {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+    }
+    
+    .filter-title {
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .filter-controls {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    
+    .filter-select {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        border: 1px solid rgba(67, 97, 238, 0.3);
+        background: white;
+        color: var(--primary-color);
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .filter-select:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+    
+    .search-box {
+        position: relative;
+        flex-grow: 1;
+        max-width: 300px;
+    }
+    
+    .search-input {
+        width: 100%;
+        padding: 0.5rem 1rem 0.5rem 2.5rem;
+        border-radius: 20px;
+        border: 1px solid rgba(67, 97, 238, 0.3);
+        background: white;
+        transition: all 0.3s ease;
+    }
+    
+    .search-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+    
+    .search-icon {
+        position: absolute;
+        left: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--primary-color);
+        opacity: 0.7;
+    }
+    
+    /* Results Table */
+    .results-table-container {
+        background: white;
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .table-header {
+        background: var(--gradient);
+        color: white;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .table-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    .table-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .btn-table {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .btn-export {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: none;
+    }
+    
+    .btn-export:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+    }
+    
+    .results-table {
+        margin: 0;
+    }
+    
+    .results-table thead {
+        background: rgba(67, 97, 238, 0.05);
+    }
+    
+    .results-table th {
+        font-weight: 600;
+        color: var(--primary-color);
+        border: none;
+        padding: 1rem;
+        position: sticky;
+        top: 0;
+        background: rgba(67, 97, 238, 0.05);
+        z-index: 10;
+    }
+    
+    .results-table td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .results-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .results-table tbody tr:hover {
+        background-color: rgba(67, 97, 238, 0.05);
+    }
+    
+    /* Sequence ID */
+    .sequence-id {
+        font-family: 'Roboto Mono', monospace;
+        font-weight: 600;
+        color: var(--primary-color);
+        font-size: 0.9rem;
+    }
+    
+    /* Species Badge */
+    .species-badge {
+        display: inline-block;
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: white;
+    }
+    
+    .species-human { background: linear-gradient(135deg, #4361ee, #3f37c9); }
+    .species-mouse { background: linear-gradient(135deg, #7209b7, #560bad); }
+    .species-zebrafish { background: linear-gradient(135deg, #06ffa5, #00b4d8); }
+    .species-arabidopsis { background: linear-gradient(135deg, #06ffa5, #00b4d8); }
+    .species-ecoli { background: linear-gradient(135deg, #ffbe0b, #fb5607); }
+    .species-bsubtilis { background: linear-gradient(135deg, #7209b7, #560bad); }
+    
+    /* Confidence Score */
+    .confidence-container {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .confidence-score {
+        font-weight: 600;
+        color: var(--primary-color);
+        min-width: 50px;
+    }
+    
+    .confidence-bar {
+        flex-grow: 1;
+        height: 8px;
+        border-radius: 4px;
+        background-color: #e9ecef;
+        overflow: hidden;
+        min-width: 100px;
+    }
+    
+    .confidence-fill {
+        height: 100%;
+        border-radius: 4px;
+        background: var(--gradient);
+        transition: width 0.3s ease;
+    }
+    
+    /* Top Predictions */
+    .top-predictions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .prediction-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85rem;
+    }
+    
+    .prediction-species {
+        font-weight: 500;
+        color: var(--dark-color);
+    }
+    
+    .prediction-score {
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+    
+    /* Sequence Preview */
+    .sequence-preview {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.85rem;
+        color: var(--dark-color);
+        background: #f8f9fa;
+        padding: 0.5rem;
+        border-radius: 5px;
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .btn-action {
+        padding: 0.35rem 0.75rem;
+        border-radius: 15px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .btn-view {
+        background: rgba(67, 97, 238, 0.1);
+        color: var(--primary-color);
+        border: none;
+    }
+    
+    .btn-view:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: scale(1.05);
+    }
+    
+    /* Summary Section */
+    .summary-section {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+    }
+    
+    .summary-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .summary-item {
+        text-align: center;
+        padding: 1.5rem;
+        border-radius: 10px;
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(114, 9, 183, 0.05));
+        transition: all 0.3s ease;
+    }
+    
+    .summary-item:hover {
+        transform: translateY(-5px);
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
+    }
+    
+    .summary-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+        background: var(--gradient);
+        margin: 0 auto 1rem;
+    }
+    
+    .summary-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+    
+    .summary-label {
+        color: var(--dark-color);
+        opacity: 0.8;
+        font-weight: 500;
+    }
+    
+    /* Chart Container */
+    .chart-container {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+    }
+    
+    .chart-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .chart-wrapper {
+        position: relative;
+        height: 400px;
+    }
+    
+    /* Bottom Actions */
+    .bottom-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+    
+    .btn-bottom {
+        padding: 0.75rem 2rem;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .btn-primary-bottom {
+        background: var(--gradient);
+        color: white;
+        border: none;
+    }
+    
+    .btn-primary-bottom:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);
+    }
+    
+    .btn-secondary-bottom {
+        background: transparent;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+    }
+    
+    .btn-secondary-bottom:hover {
+        background: var(--gradient);
+        color: white;
+        border-color: transparent;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .header-title {
+            font-size: 2rem;
+        }
+        
+        .header-stats {
+            gap: 1rem;
+        }
+        
+        .header-stat {
+            min-width: 120px;
+        }
+        
+        .filter-controls {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .search-box {
+            max-width: 100%;
+        }
+        
+        .table-header {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+        
+        .results-table {
+            font-size: 0.85rem;
+        }
+        
+        .sequence-preview {
+            max-width: 200px;
+        }
+        
+        .bottom-actions {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn-bottom {
+            width: 100%;
+            max-width: 300px;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5 results-container">
+    <!-- Header Section -->
+    <div class="header-section" data-aos="fade-up">
+        <div class="header-title">
+            <div class="header-icon">
+                <i class="fas fa-list"></i>
+            </div>
+            Batch Classification Results
+        </div>
+        <p class="header-description">
+            Classification results for {{ results|length }} DNA sequences. View detailed predictions, confidence scores, and download the complete results.
+        </p>
+        <div class="header-stats">
+            <div class="header-stat">
+                <div class="stat-value">{{ results|length }}</div>
+                <div class="stat-label">Total Sequences</div>
+            </div>
+            <div class="header-stat">
+                <div class="stat-value">{{ results|selectattr('prediction')|list|length }}</div>
+                <div class="stat-label">Classified</div>
+            </div>
+            <div class="header-stat">
+                <div class="stat-value">{{ "%.1f"|format((results|selectattr('confidence')|map(attribute='confidence')|sum / results|length) * 100) }}%</div>
+                <div class="stat-label">Avg Confidence</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Filter Section -->
+    <div class="filter-section" data-aos="fade-up" data-aos-delay="100">
+        <div class="filter-title">
+            <i class="fas fa-filter"></i> Filter Results
+        </div>
+        <div class="filter-controls">
+            <select class="filter-select" id="speciesFilter">
+                <option value="">All Species</option>
+                <option value="human">Human</option>
+                <option value="mouse">Mouse</option>
+                <option value="zebrafish">Zebrafish</option>
+                <option value="arabidopsis">Arabidopsis</option>
+                <option value="ecoli">E. coli</option>
+                <option value="bsubtilis">B. subtilis</option>
+            </select>
+            <select class="filter-select" id="confidenceFilter">
+                <option value="">All Confidence Levels</option>
+                <option value="high">High (>90%)</option>
+                <option value="medium">Medium (70-90%)</option>
+                <option value="low">Low (<70%)</option>
+            </select>
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search sequence ID...">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Summary Section -->
+    <div class="summary-section" data-aos="fade-up" data-aos-delay="200">
+        <div class="summary-title">
+            <i class="fas fa-chart-pie"></i> Classification Summary
+        </div>
+        <div class="summary-grid">
+            {% set species_counts = {} %}
+            {% for result in results %}
+                {% set _ = species_counts.update({result.prediction: species_counts.get(result.prediction, 0) + 1}) %}
+            {% endfor %}
+            {% for species, count in species_counts.items() %}
+            <div class="summary-item">
+                <div class="summary-icon">
+                    {% if 'human' in species.lower() %}
+                    <i class="fas fa-user"></i>
+                    {% elif 'mouse' in species.lower() %}
+                    <i class="fas fa-mouse"></i>
+                    {% elif 'zebrafish' in species.lower() %}
+                    <i class="fas fa-fish"></i>
+                    {% elif 'arabidopsis' in species.lower() %}
+                    <i class="fas fa-seedling"></i>
+                    {% elif 'ecoli' in species.lower() %}
+                    <i class="fas fa-bacteria"></i>
+                    {% elif 'bsubtilis' in species.lower() %}
+                    <i class="fas fa-bacteria"></i>
+                    {% else %}
+                    <i class="fas fa-dna"></i>
+                    {% endif %}
+                </div>
+                <div class="summary-value">{{ count }}</div>
+                <div class="summary-label">{{ species }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Chart Section -->
+    <div class="chart-container" data-aos="fade-up" data-aos-delay="300">
+        <div class="chart-title">
+            <i class="fas fa-chart-bar"></i> Species Distribution
+        </div>
+        <div class="chart-wrapper">
+            <canvas id="speciesChart"></canvas>
+        </div>
+    </div>
+    
+    <!-- Results Table -->
+    <div class="results-table-container" data-aos="fade-up" data-aos-delay="400">
+        <div class="table-header">
+            <h5 class="table-title">Detailed Results</h5>
+            <div class="table-actions">
+                <button class="btn-table btn-export" onclick="exportResults('csv')">
+                    <i class="fas fa-file-csv"></i> Export CSV
+                </button>
+                <button class="btn-table btn-export" onclick="exportResults('json')">
+                    <i class="fas fa-file-code"></i> Export JSON
+                </button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table results-table">
+                <thead>
+                    <tr>
+                        <th>Sequence ID</th>
+                        <th>Predicted Species</th>
+                        <th>Confidence</th>
+                        <th>Top Predictions</th>
+                        <th>Sequence Preview</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsTableBody">
+                    {% for result in results %}
+                    <tr data-species="{{ result.prediction.lower() }}" data-confidence="{{ result.confidence * 100 }}">
+                        <td>
+                            <div class="sequence-id">{{ result.id }}</div>
+                        </td>
+                        <td>
+                            <span class="species-badge species-{{ result.prediction.lower().replace(' ', '_').replace('.', '') }}">
+                                {{ result.prediction }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="confidence-container">
+                                <div class="confidence-score">{{ "%.1f"|format(result.confidence * 100) }}%</div>
+                                <div class="confidence-bar">
+                                    <div class="confidence-fill" style="width: {{ result.confidence * 100 }}%"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="top-predictions">
+                                {% for species, prob in result.top_predictions %}
+                                <div class="prediction-item">
+                                    <span class="prediction-species">{{ species }}</span>
+                                    <span class="prediction-score">{{ "%.1f"|format(prob * 100) }}%</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="sequence-preview" title="{{ result.sequence }}">
+                                {{ result.sequence }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn-action btn-view" onclick="viewDetails('{{ loop.index0 }}')">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Bottom Actions -->
+    <div class="bottom-actions" data-aos="fade-up" data-aos-delay="500">
+        <a href="{{ url_for('upload') }}" class="btn-bottom btn-primary-bottom">
+            <i class="fas fa-redo"></i> Analyze More Sequences
+        </a>
+        <a href="{{ url_for('index') }}" class="btn-bottom btn-secondary-bottom">
+            <i class="fas fa-home"></i> Back to Home
+        </a>
+    </div>
+</div>
+
+<!-- Details Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Sequence Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modalContent">
+                    <!-- Content will be populated dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Store results data
+    const results = {{ results | tojson }};
+    
+    // Initialize chart
+    initializeChart();
+    
+    // Filter functionality
+    const speciesFilter = document.getElementById('speciesFilter');
+    const confidenceFilter = document.getElementById('confidenceFilter');
+    const searchInput = document.getElementById('searchInput');
+    const tableBody = document.getElementById('resultsTableBody');
+    
+    function filterResults() {
+        const speciesValue = speciesFilter.value.toLowerCase();
+        const confidenceValue = confidenceFilter.value;
+        const searchValue = searchInput.value.toLowerCase();
+        
+        const rows = tableBody.getElementsByTagName('tr');
+        
+        for (let row of rows) {
+            const species = row.dataset.species;
+            const confidence = parseFloat(row.dataset.confidence);
+            const sequenceId = row.querySelector('.sequence-id').textContent.toLowerCase();
+            
+            let showRow = true;
+            
+            // Filter by species
+            if (speciesValue && !species.includes(speciesValue)) {
+                showRow = false;
+            }
+            
+            // Filter by confidence
+            if (confidenceValue) {
+                if (confidenceValue === 'high' && confidence <= 90) showRow = false;
+                if (confidenceValue === 'medium' && (confidence < 70 || confidence > 90)) showRow = false;
+                if (confidenceValue === 'low' && confidence >= 70) showRow = false;
+            }
+            
+            // Filter by search
+            if (searchValue && !sequenceId.includes(searchValue)) {
+                showRow = false;
+            }
+            
+            row.style.display = showRow ? '' : 'none';
+        }
+    }
+    
+    speciesFilter.addEventListener('change', filterResults);
+    confidenceFilter.addEventListener('change', filterResults);
+    searchInput.addEventListener('input', filterResults);
+    
+    // Export functionality
+    window.exportResults = function(format) {
+        if (format === 'csv') {
+            exportCSV();
+        } else if (format === 'json') {
+            exportJSON();
+        }
+    };
+    
+    function exportCSV() {
+        let csv = 'Sequence ID,Predicted Species,Confidence,Top Prediction,Sequence\n';
+        
+        results.forEach(result => {
+            const topPrediction = result.top_predictions[0];
+            csv += `"${result.id}","${result.prediction}","${(result.confidence * 100).toFixed(1)}%","${topPrediction[0]} (${(topPrediction[1] * 100).toFixed(1)}%)","${result.sequence}"\n`;
+        });
+        
+        downloadFile(csv, 'batch_results.csv', 'text/csv');
+    }
+    
+    function exportJSON() {
+        const json = JSON.stringify(results, null, 2);
+        downloadFile(json, 'batch_results.json', 'application/json');
+    }
+    
+    function downloadFile(content, filename, contentType) {
+        const blob = new Blob([content], { type: contentType });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+    
+    // View details functionality
+    window.viewDetails = function(index) {
+        const result = results[index];
+        const modalContent = document.getElementById('modalContent');
+        
+        modalContent.innerHTML = `
+            <div class="row">
+                <div class="col-md-6">
+                    <h6>Sequence Information</h6>
+                    <table class="table table-sm">
+                        <tr>
+                            <td><strong>ID:</strong></td>
+                            <td>${result.id}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Predicted Species:</strong></td>
+                            <td><span class="species-badge species-{{ result.prediction.lower().replace(' ', '_').replace('.', '') }}">{{ result.prediction }}</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Confidence:</strong></td>
+                            <td>${(result.confidence * 100).toFixed(1)}%</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <h6>Top Predictions</h6>
+                    <div class="top-predictions">
+                        ${result.top_predictions.map(pred => `
+                            <div class="prediction-item">
+                                <span class="prediction-species">${pred[0]}</span>
+                                <span class="prediction-score">${(pred[1] * 100).toFixed(1)}%</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3">
+                <h6>Sequence</h6>
+                <div class="sequence-preview" style="max-width: none; white-space: pre-wrap;">${result.sequence}</div>
+            </div>
+        `;
+        
+        const modal = new bootstrap.Modal(document.getElementById('detailsModal'));
+        modal.show();
+    }
+    
+    // Initialize chart
+    function initializeChart() {
+        const ctx = document.getElementById('speciesChart').getContext('2d');
+        
+        // Count species
+        const speciesCounts = {};
+        results.forEach(result => {
+            speciesCounts[result.prediction] = (speciesCounts[result.prediction] || 0) + 1;
+        });
+        
+        const labels = Object.keys(speciesCounts);
+        const data = Object.values(speciesCounts);
+        
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Number of Sequences',
+                    data: data,
+                    backgroundColor: [
+                        'rgba(67, 97, 238, 0.8)',
+                        'rgba(114, 9, 183, 0.8)',
+                        'rgba(6, 255, 165, 0.8)',
+                        'rgba(0, 180, 216, 0.8)',
+                        'rgba(255, 190, 11, 0.8)',
+                        'rgba(251, 86, 7, 0.8)'
+                    ],
+                    borderWidth: 0,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `Count: ${context.raw}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

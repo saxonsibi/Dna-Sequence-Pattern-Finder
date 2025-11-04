@@ -1,0 +1,1460 @@
+{% extends "base.html" %}
+
+{% block title %}Analysis Results - DNA Sequence Pattern Finder{% endblock %}
+
+{% block head %}
+<style>
+    /* Results Container */
+    .results-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    /* Result Cards */
+    .result-card {
+        border-radius: 15px;
+        border: none;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin-bottom: 2rem;
+    }
+    
+    .result-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+    }
+    
+    .result-header {
+        background: var(--gradient);
+        color: white;
+        padding: 1.5rem;
+        position: relative;
+    }
+    
+    .result-header h5 {
+        margin: 0;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .result-body {
+        padding: 2rem;
+    }
+    
+    /* Stats Display */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .stat-item {
+        text-align: center;
+        padding: 1.5rem;
+        border-radius: 15px;
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(114, 9, 183, 0.05));
+        transition: all 0.3s ease;
+    }
+    
+    .stat-item:hover {
+        transform: translateY(-5px);
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
+    }
+    
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.5rem;
+        color: white;
+        background: var(--gradient);
+    }
+    
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+        color: var(--dark-color);
+        font-weight: 500;
+    }
+    
+    /* Chart Containers */
+    .chart-container {
+        position: relative;
+        height: 400px;
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+    
+    .chart-container.small {
+        height: 300px;
+    }
+    
+    /* NEW: Chart controls for zoom functionality */
+    .chart-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .chart-info {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+    
+    .chart-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .chart-button {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        background: rgba(67, 97, 238, 0.1);
+        color: var(--primary-color);
+        border: 1px solid rgba(67, 97, 238, 0.2);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .chart-button:hover {
+        background: rgba(67, 97, 238, 0.2);
+        border-color: rgba(67, 97, 238, 0.4);
+    }
+    
+    .chart-button.active {
+        background: var(--gradient);
+        color: white;
+        border-color: transparent;
+    }
+    
+    /* Classification Results */
+    .classification-result {
+        text-align: center;
+        padding: 2rem;
+        border-radius: 15px;
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(114, 9, 183, 0.05));
+        margin-bottom: 2rem;
+    }
+    
+    .species-icon {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 3rem;
+        color: white;
+        background: var(--gradient);
+        box-shadow: var(--shadow);
+    }
+    
+    /* Style for the SVG mouse icon */
+    .species-icon svg {
+        width: 3rem; /* Same as font-size */
+        height: 3rem;
+        fill: white; /* Same as icon color */
+    }
+    
+    .species-name {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+    
+    .confidence-badge {
+        display: inline-block;
+        padding: 0.5rem 1.5rem;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        background: var(--gradient);
+        color: white;
+        margin-bottom: 1.5rem;
+    }
+    
+    .sequence-properties {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 1.5rem;
+    }
+    
+    .property-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        background: rgba(67, 97, 238, 0.1);
+        color: var(--primary-color);
+    }
+    
+    /* Tables */
+    .results-table {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+    }
+    
+    .results-table thead {
+        background: var(--gradient);
+        color: white;
+    }
+    
+    .results-table th {
+        font-weight: 600;
+        border: none;
+        padding: 1rem;
+    }
+    
+    .results-table td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .results-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .results-table tbody tr:hover {
+        background-color: rgba(67, 97, 238, 0.05);
+    }
+    
+    /* Progress Bars */
+    .progress-container {
+        margin-top: 0.5rem;
+    }
+    
+    .progress {
+        height: 8px;
+        border-radius: 4px;
+        background-color: #e9ecef;
+    }
+    
+    .progress-bar {
+        border-radius: 4px;
+        background: var(--gradient);
+    }
+    
+    /* Sequence Preview */
+    .sequence-preview {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1.5rem;
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-break: break-all;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    
+    /* NEW: Sequence preview controls */
+    .sequence-preview-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .sequence-preview-info {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+    
+    .sequence-preview-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .sequence-preview-button {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        background: rgba(67, 97, 238, 0.1);
+        color: var(--primary-color);
+        border: 1px solid rgba(67, 97, 238, 0.2);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .sequence-preview-button:hover {
+        background: rgba(67, 97, 238, 0.2);
+        border-color: rgba(67, 97, 238, 0.4);
+    }
+    
+    /* NEW: E. coli specific styling */
+    .ecoli-sequence {
+        background: rgba(76, 175, 80, 0.05);
+        border-left: 3px solid #4CAF50;
+        padding: 0.5rem 1rem;
+        margin-bottom: 0.5rem;
+        border-radius: 0 5px 5px 0;
+    }
+    
+    /* Motif Items */
+    .motif-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 0.5rem;
+        background: rgba(67, 97, 238, 0.05);
+        transition: all 0.3s ease;
+    }
+    
+    .motif-item:hover {
+        background: rgba(67, 97, 238, 0.1);
+        transform: translateX(5px);
+    }
+    
+    .motif-sequence {
+        font-family: 'Roboto Mono', monospace;
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+    
+    .motif-count {
+        background: var(--gradient);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    
+    /* Mutation Items */
+    .mutation-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 0.5rem;
+        background: rgba(255, 190, 11, 0.05);
+        transition: all 0.3s ease;
+    }
+    
+    .mutation-item:hover {
+        background: rgba(255, 190, 11, 0.1);
+        transform: translateX(5px);
+    }
+    
+    .mutation-type {
+        font-weight: 600;
+        color: var(--warning-color);
+    }
+    
+    .mutation-count {
+        background: var(--warning-color);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+    
+    .btn-action {
+        padding: 0.75rem 2rem;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .btn-primary-action {
+        background: var(--gradient);
+        color: white;
+        border: none;
+    }
+    
+    .btn-primary-action:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);
+    }
+    
+    .btn-secondary-action {
+        background: transparent;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+    }
+    
+    .btn-secondary-action:hover {
+        background: var(--gradient);
+        color: white;
+        border-color: transparent;
+    }
+    
+    /* Tabs */
+    .analysis-tabs {
+        margin-bottom: 2rem;
+    }
+    
+    .nav-tabs {
+        border-bottom: none;
+    }
+    
+    .nav-tabs .nav-link {
+        border: none;
+        border-radius: 30px;
+        margin-right: 0.5rem;
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+        color: var(--dark-color);
+        background: rgba(67, 97, 238, 0.05);
+        transition: all 0.3s ease;
+    }
+    
+    .nav-tabs .nav-link:hover {
+        background: rgba(67, 97, 238, 0.1);
+    }
+    
+    .nav-tabs .nav-link.active {
+        background: var(--gradient);
+        color: white;
+    }
+    
+    /* Tab Content */
+    .tab-content {
+        padding: 2rem;
+        border-radius: 15px;
+        background: white;
+        box-shadow: var(--shadow);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+        }
+        
+        .species-name {
+            font-size: 1.5rem;
+        }
+        
+        .sequence-properties {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn-action {
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .chart-controls {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        
+        .sequence-preview-controls {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5 results-container">
+    <!-- Success Alert -->
+    <div class="alert alert-success alert-dismissible fade show" role="alert" data-aos="fade-down">
+        <i class="fas fa-check-circle me-2"></i>
+        <strong>Analysis completed successfully!</strong> Your DNA sequence has been processed.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="mt-2">
+            <small class="text-muted">Analysis ID: {{ results.sequence_id }} | Completed at: {{ results.timestamp }}</small>
+        </div>
+    </div>
+    
+    <!-- Sequence Information -->
+    <div class="result-card" data-aos="fade-up">
+        <div class="result-header">
+            <h5><i class="fas fa-dna"></i> Sequence Information</h5>
+        </div>
+        <div class="result-body">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-ruler-horizontal"></i>
+                    </div>
+                    <div class="stat-value">{{ "{:,}".format(results.sequence_length) }}</div>
+                    <div class="stat-label">Sequence Length (bp)</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="stat-value">{{ results.sequence_count }}</div>
+                    <div class="stat-label">Number of Sequences</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                    <div class="stat-value">{{ results.analysis_type.title() }}</div>
+                    <div class="stat-label">Analysis Type</div>
+                </div>
+                {% if 'gc_content' in results %}
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="stat-value">{{ "%.1f"|format(results.gc_content * 100) }}%</div>
+                    <div class="stat-label">GC Content</div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- UPDATED: Sequence Preview Section -->
+            {% if sequences %}
+            <h6 class="mb-3">Sequence Preview:</h6>
+            
+            <!-- NEW: Sequence preview controls -->
+            <div class="sequence-preview-controls">
+                <div class="sequence-preview-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Showing <span id="sequenceCount">5</span> of {{ sequences|length }} sequences
+                </div>
+                <div class="sequence-preview-buttons">
+                    {% if sequences|length > 5 %}
+                    <button id="showMoreSequences" class="sequence-preview-button">
+                        <i class="fas fa-plus me-1"></i> Show More
+                    </button>
+                    <button id="showAllSequences" class="sequence-preview-button">
+                        <i class="fas fa-expand me-1"></i> Show All
+                    </button>
+                    {% endif %}
+                    <button id="resetSequences" class="sequence-preview-button" style="display: none;">
+                        <i class="fas fa-compress me-1"></i> Show Less
+                    </button>
+                </div>
+            </div>
+            
+            <div class="sequence-preview" id="sequencePreview">
+                {% set is_ecoli = results.kingdom and 'ecoli' in results.kingdom.lower() %}
+                {% for seq in sequences[:5] %}
+                <div class="mb-2 {% if is_ecoli %}ecoli-sequence{% endif %}">
+                    <strong>Sequence {{ loop.index }}:</strong> {{ seq[:100] }}{% if seq|length > 100 %}...{% endif %}
+                </div>
+                {% endfor %}
+                
+                <!-- Hidden sequences that will be shown when "Show More" is clicked -->
+                {% if sequences|length > 5 %}
+                <div id="hiddenSequences" style="display: none;">
+                    {% for seq in sequences[5:20] %}
+                    <div class="mb-2 {% if is_ecoli %}ecoli-sequence{% endif %}">
+                        <strong>Sequence {{ loop.index + 5 }}:</strong> {{ seq[:100] }}{% if seq|length > 100 %}...{% endif %}
+                    </div>
+                    {% endfor %}
+                    
+                    <!-- Additional hidden sequences for "Show All" -->
+                    <div id="allSequences" style="display: none;">
+                        {% for seq in sequences[20:] %}
+                        <div class="mb-2 {% if is_ecoli %}ecoli-sequence{% endif %}">
+                            <strong>Sequence {{ loop.index + 20 }}:</strong> {{ seq[:100] }}{% if seq|length > 100 %}...{% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% if results.analysis_type == 'basic' %}
+    <!-- Basic Analysis Results -->
+    <div class="row">
+        <div class="col-md-6" data-aos="fade-right">
+            <div class="result-card">
+                <div class="result-header">
+                    <h5><i class="fas fa-chart-pie"></i> Nucleotide Composition</h5>
+                </div>
+                <div class="result-body">
+                    <div class="chart-container">
+                        <canvas id="nucleotideChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6" data-aos="fade-left">
+            <div class="result-card">
+                <div class="result-header">
+                    <h5><i class="fas fa-chart-bar"></i> Nucleotide Counts</h5>
+                </div>
+                <div class="result-body">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #4CAF50, #388E3C);">
+                                <span style="font-weight: bold; font-size: 1.5rem;">A</span>
+                            </div>
+                            <div class="stat-value">{{ "{:,}".format(results.a_count) }}</div>
+                            <div class="stat-label">A Count</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #F44336, #D32F2F);">
+                                <span style="font-weight: bold; font-size: 1.5rem;">T</span>
+                            </div>
+                            <div class="stat-value">{{ "{:,}".format(results.t_count) }}</div>
+                            <div class="stat-label">T Count</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #2196F3, #1976D2);">
+                                <span style="font-weight: bold; font-size: 1.5rem;">G</span>
+                            </div>
+                            <div class="stat-value">{{ "{:,}".format(results.g_count) }}</div>
+                            <div class="stat-label">G Count</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #FF9800, #F57C00);">
+                                <span style="font-weight: bold; font-size: 1.5rem;">C</span>
+                            </div>
+                            <div class="stat-value">{{ "{:,}".format(results.c_count) }}</div>
+                            <div class="stat-label">C Count</div>
+                        </div>
+                        {% if 'other_count' in results %}
+                        <div class="stat-item">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #9E9E9E, #757575);">
+                                <span style="font-weight: bold; font-size: 1.5rem;">N</span>
+                            </div>
+                            <div class="stat-value">{{ "{:,}".format(results.other_count) }}</div>
+                            <div class="stat-label">Other Count</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- GC Content Distribution Chart -->
+    <div class="result-card" data-aos="fade-up">
+        <div class="result-header">
+            <h5><i class="fas fa-chart-line"></i> GC Content Distribution</h5>
+        </div>
+        <div class="result-body">
+            <!-- NEW: Chart controls for zoom functionality -->
+            <div class="chart-controls">
+                <div class="chart-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Use mouse wheel to zoom, drag to pan. Click reset to restore original view.
+                </div>
+                <div class="chart-buttons">
+                    <button id="resetZoom" class="chart-button">
+                        <i class="fas fa-undo me-1"></i> Reset Zoom
+                    </button>
+                    <button id="togglePan" class="chart-button">
+                        <i class="fas fa-hand-paper me-1"></i> Pan Mode
+                    </button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="gcContentChart"></canvas>
+            </div>
+            <div class="mt-3">
+                <p class="text-muted">
+                    <i class="fas fa-info-circle me-2"></i>
+                    This chart shows the GC content percentage across the sequence using a sliding window approach.
+                    The window size is {{ gc_params.window_size if gc_params is defined else '1000' }} bp with a step size of {{ gc_params.step_size if gc_params is defined else '500' }} bp.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="result-card" data-aos="fade-up">
+        <div class="result-header">
+            <h5><i class="fas fa-info-circle"></i> Sequence Properties</h5>
+        </div>
+        <div class="result-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <table class="table table-borderless">
+                        <tr>
+                            <td><strong>GC Content:</strong></td>
+                            <td>{{ "%.2f"|format(results.gc_content * 100) }}%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>AT Content:</strong></td>
+                            <td>{{ "%.2f"|format(results.at_content * 100) }}%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CpG Ratio:</strong></td>
+                            <td>{{ "%.4f"|format(results.cpg_ratio) }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <table class="table table-borderless">
+                        <tr>
+                            <td><strong>Entropy:</strong></td>
+                            <td>{{ "%.4f"|format(results.entropy) }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Complexity:</strong></td>
+                            <td>{{ "%.4f"|format(results.complexity) }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Longest Homopolymer:</strong></td>
+                            <td>{{ results.longest_homopolymer_runs.A }}A, {{ results.longest_homopolymer_runs.T }}T, {{ results.longest_homopolymer_runs.G }}G, {{ results.longest_homopolymer_runs.C }}C</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% elif results.analysis_type == 'motif' %}
+    <!-- Motif Discovery Results -->
+    <div class="result-card" data-aos="fade-up">
+        <div class="result-header">
+            <h5><i class="fas fa-search"></i> Motif Discovery Results</h5>
+        </div>
+        <div class="result-body">
+            <ul class="nav nav-tabs analysis-tabs" id="motifTabs" role="tablist">
+                {% set first_tab = true %}
+                {% for key, motif_data in results.motifs_by_length.items() %}
+                {% set length = key.split('_')[1] %}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link {% if first_tab %}active{% set first_tab = false %}{% endif %}" id="motif-{{ length }}-tab" data-bs-toggle="tab" data-bs-target="#motif-{{ length }}" type="button" role="tab" aria-controls="motif-{{ length }}" aria-selected="{% if first_tab %}true{% else %}false{% endif %}">
+                        {{ length }}-mers
+                    </button>
+                </li>
+                {% endfor %}
+            </ul>
+            
+            <div class="tab-content" id="motifTabsContent">
+                {% set first_pane = true %}
+                {% for key, motif_data in results.motifs_by_length.items() %}
+                {% set length = key.split('_')[1] %}
+                <div class="tab-pane fade {% if first_pane %}show active{% set first_pane = false %}{% endif %}" id="motif-{{ length }}" role="tabpanel" aria-labelledby="motif-{{ length }}-tab">
+                    <h6>Top {{ length }}-mer Motifs:</h6>
+                    {% for motif, count in (motif_data.counts.items() | list)[:10] %}
+                    <div class="motif-item">
+                        <div class="motif-sequence">{{ motif }}</div>
+                        <div class="motif-count">{{ count }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6" data-aos="fade-right">
+            <div class="result-card">
+                <div class="result-header">
+                    <h5><i class="fas fa-sync-alt"></i> Palindromic Motifs</h5>
+                </div>
+                <div class="result-body">
+                    <!-- FIXED: Palindromic Motifs Display -->
+                    {% if results.palindromic_motifs %}
+                    {% for palindromic in results.palindromic_motifs[:10] %}
+                    <div class="motif-item">
+                        <div class="motif-sequence">
+                            {% if palindromic is iterable and palindromic is not string %}
+                                <!-- If palindromic is a tuple or list, access by index -->
+                                {{ palindromic[0] }}
+                            {% else %}
+                                <!-- If palindromic is an object with attributes -->
+                                {{ palindromic.motif }}
+                            {% endif %}
+                        </div>
+                        <div class="motif-count">
+                            {% if palindromic is iterable and palindromic is not string %}
+                                <!-- If palindromic is a tuple or list, access by index -->
+                                {{ palindromic[1] }}
+                            {% else %}
+                                <!-- If palindromic is an object with attributes -->
+                                {{ palindromic.count }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <p class="text-muted">No palindromic motifs found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6" data-aos="fade-left">
+            <div class="result-card">
+                <div class="result-header">
+                    <h5><i class="fas fa-redo"></i> Tandem Repeats</h5>
+                </div>
+                <div class="result-body">
+                    {% for repeat in results.tandem_repeats[:10] %}
+                    <div class="motif-item">
+                        <div>
+                            <div class="motif-sequence">{{ repeat.sequence }}</div>
+                            <small class="text-muted">Position: {{ repeat.position }}, Unit: {{ repeat.unit }}</small>
+                        </div>
+                        <div class="motif-count">{{ repeat.repeat_count }}x</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% elif results.analysis_type == 'mutation' %}
+    <!-- Mutation Detection Results -->
+    <div class="result-card" data-aos="fade-up">
+        <div class="result-header">
+            <h5><i class="fas fa-exchange-alt"></i> Mutation Detection Results</h5>
+        </div>
+        <div class="result-body">
+            <div class="classification-result">
+                <div class="species-icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <div class="species-name">{{ results.mutations.total }} Mutations</div>
+                <div class="confidence-badge">Compared to {{ results.reference_id }}</div>
+                <div class="sequence-properties">
+                    <div class="property-badge">Substitution Rate: {{ "%.4f"|format(results.mutation_rates.substitution_rate) }}</div>
+                    <div class="property-badge">Indel Rate: {{ "%.4f"|format(results.mutation_rates.indel_rate) }}</div>
+                    <div class="property-badge">Ti/Tv Ratio: {{ "%.2f"|format(results.mutation_rates.ti_tv_ratio) }}</div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <h6>Mutation Types:</h6>
+                    <div class="chart-container small">
+                        <canvas id="mutationChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h6>Mutation Counts:</h6>
+                    {% for mutation_type, count in results.mutations.items() %}
+                    {% if mutation_type != 'total' %}
+                    <div class="mutation-item">
+                        <div class="mutation-type">{{ mutation_type.title() }}</div>
+                        <div class="mutation-count">{{ count }}</div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="result-card" data-aos="fade-up">
+        <div class="result-header">
+            <h5><i class="fas fa-fire"></i> Mutation Hotspots</h5>
+        </div>
+        <div class="result-body">
+            <div class="table-responsive">
+                <table class="table results-table">
+                    <thead>
+                        <tr>
+                            <th>Region</th>
+                            <th>Mutation Count</th>
+                            <th>Mutation Density</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for hotspot in results.mutation_hotspots %}
+                        <tr>
+                            <td>{{ hotspot.start }}-{{ hotspot.end }}</td>
+                            <td>{{ hotspot.mutation_count }}</td>
+                            <td>
+                                {{ "%.2f"|format(hotspot.mutation_density * 100) }}%
+                                <div class="progress-container">
+                                    <div class="progress">
+                                        <div class="progress-bar" style="width: {{ hotspot.mutation_density * 100 }}%"></div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    {% elif results.analysis_type == 'classification' %}
+    <!-- Classification Results -->
+    <div class="result-card" data-aos="fade-up">
+        <div class="result-header">
+            <h5><i class="fas fa-brain"></i> Classification Results</h5>
+        </div>
+        <div class="result-body">
+            <div class="classification-result">
+                <div class="species-icon">
+                    {% set species_name = results.kingdom.lower() %}
+                    {% if 'human' in species_name %}
+                    <i class="fas fa-user"></i>
+                    {% elif 'mouse' in species_name %}
+                    <!-- UPDATED: Correct Animal Mouse Silhouette SVG Icon from reference page -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M17.879904 8.827776C17.007839999999998 9.009744 16.240752 9.633312 15.198288 11.007408C14.504784 11.921616 13.893216 12.563088 13.715088 12.563088C13.652064000000001 12.563088 13.52472 12.416544 13.432224000000001 12.23736C13.150656 11.692272 12.399216000000001 10.930704 11.788512 10.571088C10.960128000000001 10.083456 10.085472000000001 9.842064 9.128352000000001 9.837024C8.399568 9.833088 8.300448 9.854735999999999 7.688784 10.152048C6.995424 10.489008 6.425952 10.622832 6.234144 10.493856000000001C6.142032 10.432032 6.13872 10.342704000000001 6.217728 10.049376C6.345312 9.575184 6.174336 9.26232 5.787552 9.26232C5.5356000000000005 9.26232 5.197488000000001 9.59664 5.062896 9.97896C5.005584 10.141824000000002 4.830336 10.189488 4.830336 10.042272C4.830336 9.993456 4.732872 9.909024 4.6136976 9.854735999999999C4.3184976 9.720096 4.049164800000001 9.9588 4.049164800000001 10.3548C4.049164800000001 10.597584 4.0083696 10.652448 3.7670687999999997 10.734048C3.4590240000000003 10.838112 2.4 11.803056 2.4 11.979648C2.4 12.039935999999999 2.5163952000000003 12.230592 2.658744 12.403344C2.9347632000000003 12.738384 3.115824 12.797952000000002 4.1084496 12.88032C4.623336 12.92304 4.662912 12.943728 5.084928000000001 13.390176C5.326848 13.646160000000002 5.524752 13.932623999999999 5.524752 14.026800000000001C5.524752 14.210064000000001 5.117376 14.600015999999998 4.830768 14.691024C4.6163904 14.759136000000002 4.6025903999999995 14.903424000000001 4.8086400000000005 14.922096000000002C5.106864 14.949167999999998 5.281872 14.905392 5.76888 14.682192C6.674304 14.267232 7.213632 14.095439999999998 7.614768 14.094287999999999C8.403936 14.092128 8.906112 14.506032000000001 8.61648 14.919839999999999C8.539152 15.030336 8.475888 15.149040000000001 8.475888 15.183696C8.475888 15.302208 9.163728 15.223152 9.189072 15.101808C9.205584 15.023184 9.385776 14.974656 9.734448 14.954736C10.246128 14.925552000000001 11.004576 14.666208 11.118768 14.481264C11.192064 14.362608 12.092496 14.356944 12.16512 14.47464C12.194928 14.522784 12.148368000000001 14.584176 12.061776 14.611199999999998C11.61936 14.749248000000001 11.51736 14.933904 11.8572 14.981952000000001C12.294096000000001 15.043584000000001 12.717696 14.836800000000002 12.904416 14.47056C13.000848 14.281392 13.118544 14.126591999999999 13.166015999999999 14.126591999999999C13.291680000000001 14.126591999999999 13.59624 13.593888000000002 13.596623999999998 13.373327999999999C13.596863999999998 13.237055999999999 13.676400000000001 13.158336 13.882800000000001 13.090176C14.259504 12.965760000000001 14.890944000000001 12.298176 15.709728 11.158464C16.81872 9.614832 17.490096 9.152016 18.631248 9.14448C19.11288 9.141264000000001 19.386672 9.187392000000001 19.683408 9.321744C20.185392 9.54888 20.70048 10.10616 20.837376000000003 10.350192C20.90352 10.48752 21.538848 11.657136 21.588863999999997 11.657136C21.688752 11.657136 21.088752 10.318224 20.90352 9.953568C20.743488 9.638352000000001 20.149968 9.187824 19.715376000000003 9.001392C19.270512 8.810544 18.370224 8.725344 17.879904 8.827776ZM9.88632 14.221824000000002C10.113072 14.2848 10.29864 14.361888 10.29864 14.393184C10.29864 14.471184000000001 9.324912000000001 14.865072000000001 9.229104 14.80584C9.18672 14.77968 9.170256 14.431152 9.170256 14.28504C9.170256 14.073264 9.201072 14.028336000000001 9.322128000000001 14.063376000000002C9.405744 14.087520000000001 9.659616 14.158848 9.88632 14.221824000000002Z" fill="currentColor"/>
+                    </svg>
+                    {% elif 'zebrafish' in species_name %}
+                    <i class="fas fa-fish"></i>
+                    {% elif 'arabidopsis' in species_name %}
+                    <i class="fas fa-seedling"></i>
+                    {% elif 'ecoli' in species_name %}
+                    <i class="fas fa-bacteria"></i>
+                    {% elif 'bsubtilis' in species_name %}
+                    <i class="fas fa-bacteria"></i>
+                    {% else %}
+                    <i class="fas fa-dna"></i>
+                    {% endif %}
+                </div>
+                <div class="species-name">{{ results.kingdom }}</div>
+                <div class="confidence-badge">{{ "%.1f"|format(results.confidence * 100) }}% Confidence</div>
+                <div class="sequence-properties">
+                    <div class="property-badge">GC Content: {{ "%.2f"|format(results.gc_content * 100) }}%</div>
+                    <div class="property-badge">CpG Ratio: {{ "%.3f"|format(results.cpg_ratio) }}</div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <h6>Species Probabilities:</h6>
+                    <div class="chart-container small">
+                        <canvas id="speciesChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h6>Classification Scores:</h6>
+                    <div class="table-responsive">
+                        <table class="table results-table">
+                            <thead>
+                                <tr>
+                                    <th>Species</th>
+                                    <th>Score</th>
+                                    <th>Confidence</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for similarity in results.similarities %}
+                                <tr>
+                                    <td>{{ similarity.species }}</td>
+                                    <td>
+                                        {{ "%.3f"|format(similarity.similarity) }}
+                                        <div class="progress-container">
+                                            <div class="progress">
+                                                <div class="progress-bar" style="width: {{ similarity.similarity * 100 }}%"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ "%.1f"|format(similarity.similarity * 100) }}%</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Action Buttons -->
+    <div class="action-buttons" data-aos="fade-up">
+        <a href="{{ url_for('upload') }}" class="btn-action btn-primary-action">
+            <i class="fas fa-redo"></i> Analyze Another Sequence
+        </a>
+        <a href="{{ url_for('index') }}" class="btn-action btn-secondary-action">
+            <i class="fas fa-home"></i> Back to Home
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- NEW: Added Chart.js and zoom plugin -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.0/dist/chartjs-plugin-zoom.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // NEW: Sequence preview controls
+    const showMoreBtn = document.getElementById('showMoreSequences');
+    const showAllBtn = document.getElementById('showAllSequences');
+    const resetBtn = document.getElementById('resetSequences');
+    const hiddenSequences = document.getElementById('hiddenSequences');
+    const allSequences = document.getElementById('allSequences');
+    const sequenceCount = document.getElementById('sequenceCount');
+    const totalSequences = {{ sequences|length if sequences else 0 }};
+    
+    if (showMoreBtn) {
+        showMoreBtn.addEventListener('click', function() {
+            hiddenSequences.style.display = 'block';
+            showMoreBtn.style.display = 'none';
+            resetBtn.style.display = 'inline-block';
+            sequenceCount.textContent = Math.min(20, totalSequences);
+        });
+    }
+    
+    if (showAllBtn) {
+        showAllBtn.addEventListener('click', function() {
+            hiddenSequences.style.display = 'block';
+            allSequences.style.display = 'block';
+            showMoreBtn.style.display = 'none';
+            showAllBtn.style.display = 'none';
+            resetBtn.style.display = 'inline-block';
+            sequenceCount.textContent = totalSequences;
+        });
+    }
+    
+    if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+            hiddenSequences.style.display = 'none';
+            allSequences.style.display = 'none';
+            showMoreBtn.style.display = 'inline-block';
+            showAllBtn.style.display = 'inline-block';
+            resetBtn.style.display = 'none';
+            sequenceCount.textContent = '5';
+        });
+    }
+    
+    // Nucleotide composition chart
+    {% if results.analysis_type == 'basic' %}
+    const nucleotideCtx = document.getElementById('nucleotideChart').getContext('2d');
+    
+    // Prepare data for nucleotide chart
+    const nucleotideLabels = ['A', 'T', 'G', 'C'];
+    const nucleotideData = [
+        {{ results.a_count }},
+        {{ results.t_count }},
+        {{ results.g_count }},
+        {{ results.c_count }}
+    ];
+    const nucleotideColors = [
+        'rgba(76, 175, 80, 0.8)',
+        'rgba(244, 67, 54, 0.8)',
+        'rgba(33, 150, 243, 0.8)',
+        'rgba(255, 152, 0, 0.8)'
+    ];
+    
+    // Add "Other" category if present
+    {% if 'other_count' in results and results.other_count > 0 %}
+    nucleotideLabels.push('Other');
+    nucleotideData.push({{ results.other_count }});
+    nucleotideColors.push('rgba(158, 158, 158, 0.8)');
+    {% endif %}
+    
+    new Chart(nucleotideCtx, {
+        type: 'doughnut',
+        data: {
+            labels: nucleotideLabels,
+            datasets: [{
+                data: nucleotideData,
+                backgroundColor: nucleotideColors,
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 20,
+                        font: {
+                            size: 14
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = Math.round((value / total) * 100);
+                            return `${label}: ${value.toLocaleString()} (${percentage}%)`;
+                        }
+                    }
+                }
+            },
+            cutout: '60%'
+        }
+    });
+    
+    // GC Content Distribution chart - UPDATED WITH ZOOM FUNCTIONALITY
+    const gcContentCtx = document.getElementById('gcContentChart').getContext('2d');
+    
+    // Check if we have real GC distribution data
+    {% if results.gc_distribution and results.gc_distribution.positions %}
+    // Use real data from the analysis
+    const gcPositions = {{ results.gc_distribution['positions'] | tojson }};
+    const gcValues = {{ results.gc_distribution['values'] | tojson }};
+    
+    // Format labels for better readability
+    const gcLabels = gcPositions.map(pos => {
+        if (pos >= 1000000) {
+            return (pos / 1000000).toFixed(1) + 'M';
+        } else if (pos >= 1000) {
+            return (pos / 1000).toFixed(0) + 'K';
+        } else {
+            return pos.toString();
+        }
+    });
+    
+    // NEW: Create GC Content Distribution chart with zoom functionality
+    const gcChart = new Chart(gcContentCtx, {
+        type: 'line',
+        data: {
+            labels: gcLabels,
+            datasets: [{
+                label: 'GC Content (%)',
+                data: gcValues,
+                borderColor: 'rgba(67, 97, 238, 1)',
+                backgroundColor: 'rgba(67, 97, 238, 0.1)',
+                tension: 0.4,
+                fill: true,
+                pointRadius: 2,
+                pointHoverRadius: 5,
+                pointBackgroundColor: 'rgba(67, 97, 238, 1)',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                intersect: false,
+                mode: 'index',
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const index = tooltipItems[0].dataIndex;
+                            return `Position: ${gcPositions[index].toLocaleString()}`;
+                        },
+                        label: function(context) {
+                            return `GC Content: ${context.raw.toFixed(1)}%`;
+                        }
+                    }
+                },
+                // NEW: Configure zoom plugin
+                zoom: {
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                        },
+                        pinch: {
+                            enabled: true
+                        },
+                        mode: 'x',
+                    },
+                    pan: {
+                        enabled: true,
+                        mode: 'x',
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Sequence Position'
+                    },
+                    grid: {
+                        display: false
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'GC Content (%)'
+                    },
+                    min: 0,
+                    max: 100,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                }
+            }
+        }
+    });
+    
+    // NEW: Add event listeners for zoom controls
+    document.getElementById('resetZoom').addEventListener('click', function() {
+        gcChart.resetZoom();
+    });
+    
+    let panMode = false;
+    document.getElementById('togglePan').addEventListener('click', function() {
+        panMode = !panMode;
+        this.classList.toggle('active');
+        
+        if (panMode) {
+            gcChart.options.plugins.zoom.pan.enabled = true;
+            gcChart.options.plugins.zoom.zoom.wheel.enabled = false;
+            gcChart.update();
+        } else {
+            gcChart.options.plugins.zoom.pan.enabled = true;
+            gcChart.options.plugins.zoom.zoom.wheel.enabled = true;
+            gcChart.update();
+        }
+    });
+    
+    {% else %}
+    // Fallback to synthetic data if real data is not available
+    const sequenceLength = {{ results.sequence_length }};
+    const windowSize = Math.min(100, Math.floor(sequenceLength / 20)); // Window size for averaging
+    const numPoints = Math.floor(sequenceLength / windowSize);
+    
+    // Generate synthetic data for demonstration
+    const labels = [];
+    const gcData = [];
+    
+    for (let i = 0; i < numPoints; i++) {
+        const position = i * windowSize;
+        labels.push(`${position}-${position + windowSize}`);
+        
+        // Simulate GC content distribution with some variation
+        const baseGC = {{ results.gc_content * 100 }};
+        gcData.push(baseGC + (Math.random() * 10 - 5)); // Add some variation
+    }
+    
+    new Chart(gcContentCtx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'GC Content (%)',
+                data: gcData,
+                borderColor: 'rgba(67, 97, 238, 1)',
+                backgroundColor: 'rgba(67, 97, 238, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `GC Content: ${context.raw.toFixed(1)}%`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Sequence Position'
+                    },
+                    grid: {
+                        display: false
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'GC Content (%)'
+                    },
+                    min: 0,
+                    max: 100,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                }
+            }
+        }
+    });
+    {% endif %}
+    {% endif %}
+    
+    // Mutation chart
+    {% if results.analysis_type == 'mutation' %}
+    const mutationCtx = document.getElementById('mutationChart').getContext('2d');
+    
+    const mutationTypes = [];
+    const mutationCounts = [];
+    
+    {% for mutation_type, count in results.mutations.items() %}
+    {% if mutation_type != 'total' %}
+    mutationTypes.push('{{ mutation_type.title() }}');
+    mutationCounts.push({{ count }});
+    {% endif %}
+    {% endfor %}
+    
+    new Chart(mutationCtx, {
+        type: 'bar',
+        data: {
+            labels: mutationTypes,
+            datasets: [{
+                label: 'Mutation Count',
+                data: mutationCounts,
+                backgroundColor: [
+                    'rgba(255, 152, 0, 0.8)',
+                    'rgba(33, 150, 243, 0.8)',
+                    'rgba(76, 175, 80, 0.8)',
+                    'rgba(244, 67, 54, 0.8)',
+                    'rgba(156, 39, 176, 0.8)',
+                    'rgba(96, 125, 139, 0.8)'
+                ],
+                borderWidth: 0,
+                borderRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `Count: ${context.raw.toLocaleString()}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+    {% endif %}
+    
+    // Species classification chart
+    {% if results.analysis_type == 'classification' %}
+    const speciesCtx = document.getElementById('speciesChart').getContext('2d');
+    
+    const speciesLabels = [];
+    const speciesScores = [];
+    
+    {% for similarity in results.similarities %}
+    speciesLabels.push('{{ similarity.species }}');
+    speciesScores.push({{ similarity.similarity }});
+    {% endfor %}
+    
+    new Chart(speciesCtx, {
+        type: 'bar',
+        data: {
+            labels: speciesLabels,
+            datasets: [{
+                label: 'Similarity Score',
+                data: speciesScores,
+                backgroundColor: [
+                    'rgba(67, 97, 238, 0.8)',
+                    'rgba(114, 9, 183, 0.8)',
+                    'rgba(6, 255, 165, 0.8)',
+                    'rgba(0, 180, 216, 0.8)',
+                    'rgba(255, 190, 11, 0.8)',
+                    'rgba(251, 86, 7, 0.8)'
+                ],
+                borderWidth: 0,
+                borderRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `Score: ${context.raw.toFixed(3)} (${(context.raw * 100).toFixed(1)}%)`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 1,
+                    grid: {
+                        display: false
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+    {% endif %}
+});
+</script>
+{% endblock %}

@@ -1,0 +1,602 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error - DNA Sequence Pattern Finder{% endblock %}
+
+{% block head %}
+<style>
+    /* 500 Error Page Styles */
+    .error-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 0;
+    }
+    
+    .error-content {
+        text-align: center;
+        max-width: 800px;
+    }
+    
+    .error-animation {
+        position: relative;
+        margin-bottom: 3rem;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .dna-helix {
+        position: relative;
+        width: 200px;
+        height: 200px;
+    }
+    
+    .helix-strand {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 3px dashed rgba(67, 97, 238, 0.3);
+        animation: rotate 20s linear infinite;
+    }
+    
+    .helix-strand:nth-child(2) {
+        width: 80%;
+        height: 80%;
+        top: 10%;
+        left: 10%;
+        border-color: rgba(114, 9, 183, 0.3);
+        animation-direction: reverse;
+        animation-duration: 15s;
+    }
+    
+    .helix-strand:nth-child(3) {
+        width: 60%;
+        height: 60%;
+        top: 20%;
+        left: 20%;
+        border-color: rgba(6, 255, 165, 0.3);
+        animation-duration: 10s;
+    }
+    
+    .error-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 4rem;
+        color: var(--danger-color);
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    
+    @keyframes pulse {
+        0% { transform: translate(-50%, -50%) scale(1); }
+        50% { transform: translate(-50%, -50%) scale(1.1); }
+        100% { transform: translate(-50%, -50%) scale(1); }
+    }
+    
+    .error-code {
+        font-size: 8rem;
+        font-weight: 700;
+        color: var(--danger-color);
+        margin-bottom: 1rem;
+        text-shadow: 0 5px 15px rgba(251, 86, 7, 0.2);
+        position: relative;
+        display: inline-block;
+    }
+    
+    .error-code::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(135deg, #ffbe0b, #fb5607);
+        border-radius: 5px;
+    }
+    
+    .error-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--dark-color);
+        margin-bottom: 1rem;
+    }
+    
+    .error-description {
+        font-size: 1.2rem;
+        color: var(--dark-color);
+        opacity: 0.8;
+        margin-bottom: 2rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .error-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 3rem;
+    }
+    
+    .btn-error {
+        padding: 0.75rem 2rem;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .btn-primary-error {
+        background: var(--gradient);
+        color: white;
+        border: none;
+    }
+    
+    .btn-primary-error:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);
+    }
+    
+    .btn-secondary-error {
+        background: transparent;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+    }
+    
+    .btn-secondary-error:hover {
+        background: var(--gradient);
+        color: white;
+        border-color: transparent;
+    }
+    
+    .troubleshooting {
+        background: linear-gradient(135deg, rgba(251, 86, 7, 0.05), rgba(255, 190, 11, 0.05));
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: var(--shadow);
+        text-align: left;
+    }
+    
+    .troubleshooting-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--danger-color);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .troubleshooting-steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+    
+    .step-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+        border-radius: 10px;
+        background: white;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+    
+    .step-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .step-number {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        background: linear-gradient(135deg, #ffbe0b, #fb5607);
+        font-weight: 600;
+        flex-shrink: 0;
+    }
+    
+    .step-content {
+        flex-grow: 1;
+    }
+    
+    .step-title {
+        font-weight: 600;
+        color: var(--dark-color);
+        margin-bottom: 0.5rem;
+    }
+    
+    .step-description {
+        color: var(--dark-color);
+        opacity: 0.8;
+        font-size: 0.9rem;
+    }
+    
+    .contact-support {
+        margin-top: 2rem;
+        text-align: center;
+        padding: 1.5rem;
+        border-radius: 10px;
+        background: white;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .contact-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+    
+    .contact-methods {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+    
+    .contact-method {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--dark-color);
+    }
+    
+    .contact-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        background: var(--gradient);
+    }
+    
+    /* Auto-refresh countdown */
+    .refresh-countdown {
+        margin-top: 2rem;
+        padding: 1rem;
+        border-radius: 10px;
+        background: rgba(67, 97, 238, 0.05);
+        text-align: center;
+    }
+    
+    .countdown-text {
+        font-weight: 500;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+    
+    .countdown-timer {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+    
+    .progress {
+        height: 8px;
+        border-radius: 4px;
+        background-color: #e9ecef;
+        margin-top: 0.5rem;
+    }
+    
+    .progress-bar {
+        border-radius: 4px;
+        background: var(--gradient);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .error-code {
+            font-size: 6rem;
+        }
+        
+        .error-title {
+            font-size: 2rem;
+        }
+        
+        .error-description {
+            font-size: 1rem;
+        }
+        
+        .error-actions {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn-error {
+            width: 100%;
+            max-width: 300px;
+            justify-content: center;
+        }
+        
+        .contact-methods {
+            flex-direction: column;
+            gap: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <div class="error-content" data-aos="fade-up">
+        <!-- DNA Helix Animation -->
+        <div class="error-animation">
+            <div class="dna-helix">
+                <div class="helix-strand"></div>
+                <div class="helix-strand"></div>
+                <div class="helix-strand"></div>
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Error Code -->
+        <div class="error-code" data-aos="fade-up" data-aos-delay="100">500</div>
+        
+        <!-- Error Title -->
+        <h1 class="error-title" data-aos="fade-up" data-aos-delay="200">Server Error</h1>
+        
+        <!-- Error Description -->
+        <p class="error-description" data-aos="fade-up" data-aos-delay="300">
+            Oops! Something went wrong with our DNA sequencing process. Our servers encountered an unexpected error while processing your request.
+        </p>
+        
+        <!-- Action Buttons -->
+        <div class="error-actions" data-aos="fade-up" data-aos-delay="400">
+            <button onclick="location.reload()" class="btn-error btn-primary-error">
+                <i class="fas fa-redo me-2"></i> Try Again
+            </button>
+            <a href="{{ url_for('index') }}" class="btn-error btn-secondary-error">
+                <i class="fas fa-home me-2"></i> Go to Home
+            </a>
+        </div>
+        
+        <!-- Auto-refresh Countdown -->
+        <div class="refresh-countdown" data-aos="fade-up" data-aos-delay="500">
+            <p class="countdown-text">Auto-refreshing in:</p>
+            <div class="countdown-timer" id="countdown">30</div>
+            <div class="progress">
+                <div class="progress-bar" id="progressBar" style="width: 100%"></div>
+            </div>
+        </div>
+        
+        <!-- Troubleshooting Steps -->
+        <div class="troubleshooting" data-aos="fade-up" data-aos-delay="600">
+            <h3 class="troubleshooting-title">
+                <i class="fas fa-tools"></i> Troubleshooting Steps
+            </h3>
+            <div class="troubleshooting-steps">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4 class="step-title">Refresh the Page</h4>
+                        <p class="step-description">Sometimes temporary issues can be resolved by simply refreshing the page.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4 class="step-title">Check Your Connection</h4>
+                        <p class="step-description">Ensure you have a stable internet connection to our servers.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4 class="step-title">Clear Browser Cache</h4>
+                        <p class="step-description">Clearing your browser cache and cookies can resolve many issues.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4 class="step-title">Try a Different Browser</h4>
+                        <p class="step-description">Some issues are browser-specific, so try using a different browser.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Support -->
+            <div class="contact-support">
+                <h4 class="contact-title">Still having issues?</h4>
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <span>support@dnaclassifier.com</span>
+                    </div>
+                    <div class="contact-method">
+                        <div class="contact-icon">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                        <span>Report an Issue</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-refresh countdown
+    let countdown = 30;
+    const countdownElement = document.getElementById('countdown');
+    const progressBar = document.getElementById('progressBar');
+    
+    const countdownInterval = setInterval(function() {
+        countdown--;
+        countdownElement.textContent = countdown;
+        progressBar.style.width = (countdown / 30 * 100) + '%';
+        
+        if (countdown <= 0) {
+            clearInterval(countdownInterval);
+            location.reload();
+        }
+    }, 1000);
+    
+    // Add interactive elements to the error page
+    const helixStrands = document.querySelectorAll('.helix-strand');
+    
+    // Randomize animation speeds
+    helixStrands.forEach((strand, index) => {
+        const randomSpeed = 10 + Math.random() * 20;
+        strand.style.animationDuration = randomSpeed + 's';
+    });
+    
+    // Add click interaction to the error icon
+    const errorIcon = document.querySelector('.error-icon');
+    
+    errorIcon.addEventListener('click', function() {
+        this.style.transform = 'translate(-50%, -50%) scale(1.2) rotate(360deg)';
+        this.style.transition = 'transform 0.5s ease';
+        
+        setTimeout(() => {
+            this.style.transform = 'translate(-50%, -50%) scale(1) rotate(0deg)';
+        }, 500);
+    });
+    
+    // Add a fun fact about DNA
+    const funFacts = [
+        "DNA can store 215 petabytes of information in a single gram.",
+        "If you could type 60 words per minute, eight hours a day, it would take approximately 50 years to type the human genome.",
+        "Human DNA is 99.9% identical from person to person.",
+        "DNA in all living things is made of the same four chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T).",
+        "If all the DNA in your body were put end to end, it would reach to the sun and back over 600 times."
+    ];
+    
+    // Display a random fun fact
+    const randomFact = funFacts[Math.floor(Math.random() * funFacts.length)];
+    
+    // Create a fun fact element
+    const funFactElement = document.createElement('div');
+    funFactElement.className = 'alert alert-info mt-4';
+    funFactElement.innerHTML = `
+        <i class="fas fa-dna me-2"></i>
+        <strong>Did you know?</strong> ${randomFact}
+    `;
+    
+    // Insert after the troubleshooting section
+    const troubleshooting = document.querySelector('.troubleshooting');
+    troubleshooting.parentNode.insertBefore(funFactElement, troubleshooting.nextSibling);
+    
+    // Add error reporting functionality
+    const reportIssueBtn = document.querySelector('.contact-method:last-child');
+    
+    if (reportIssueBtn) {
+        reportIssueBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Create error report modal
+            const modal = document.createElement('div');
+            modal.className = 'modal fade';
+            modal.innerHTML = `
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Report an Issue</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="errorReportForm">
+                                <div class="mb-3">
+                                    <label for="errorDescription" class="form-label">Please describe what you were doing when the error occurred:</label>
+                                    <textarea class="form-control" id="errorDescription" rows="3" required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="userEmail" class="form-label">Your email (optional):</label>
+                                    <input type="email" class="form-control" id="userEmail">
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="includeSystemInfo">
+                                    <label class="form-check-label" for="includeSystemInfo">
+                                        Include system information (browser, OS, etc.)
+                                    </label>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" id="submitErrorReport">Submit Report</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Initialize and show the modal
+            const bsModal = new bootstrap.Modal(modal);
+            bsModal.show();
+            
+            // Handle form submission
+            document.getElementById('submitErrorReport').addEventListener('click', function() {
+                const description = document.getElementById('errorDescription').value;
+                const email = document.getElementById('userEmail').value;
+                const includeSystemInfo = document.getElementById('includeSystemInfo').checked;
+                
+                if (description) {
+                    // In a real application, you would send this data to your server
+                    console.log('Error report submitted:', {
+                        description,
+                        email,
+                        includeSystemInfo,
+                        userAgent: navigator.userAgent,
+                        url: window.location.href,
+                        timestamp: new Date().toISOString()
+                    });
+                    
+                    // Show success message
+                    bsModal.hide();
+                    
+                    const successAlert = document.createElement('div');
+                    successAlert.className = 'alert alert-success mt-3';
+                    successAlert.innerHTML = '<i class="fas fa-check-circle me-2"></i>Thank you for reporting this issue. We\'ll look into it as soon as possible.';
+                    
+                    document.querySelector('.contact-support').appendChild(successAlert);
+                    
+                    // Remove the modal from the DOM
+                    setTimeout(() => {
+                        document.body.removeChild(modal);
+                    }, 500);
+                }
+            });
+            
+            // Clean up when modal is hidden
+            modal.addEventListener('hidden.bs.modal', function() {
+                setTimeout(() => {
+                    if (document.body.contains(modal)) {
+                        document.body.removeChild(modal);
+                    }
+                }, 500);
+            });
+        });
+    }
+});
+</script>
+{% endblock %}
