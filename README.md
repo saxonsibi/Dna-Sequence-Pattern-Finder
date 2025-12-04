@@ -94,7 +94,7 @@ Open [http://localhost:5000](http://localhost:5000) in your browser.
 
 - **Maintainer:** [@saxonsibi](https://github.com/saxonsibi)
 - **License:** See [LICENSE](LICENSE)
-- **Contributions welcome:** Please see [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) and our [`docs/CODE_OF_CONDUCT.md`](docs/CODE_OF_CONDUCT.md).
+- **Contributions welcome:** @saxonsibi,@Nandana KM
 
 ---
 
