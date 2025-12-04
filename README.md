@@ -94,7 +94,7 @@ Open [http://localhost:5000](http://localhost:5000) in your browser.
 
 - **Maintainer:** [@saxonsibi](https://github.com/saxonsibi)
 - **License:** See [LICENSE](LICENSE)
-- **Contributions welcome:** @saxonsibi,@Nandana KM
+- **Contributions :** [@saxonsibi](https://github.com/saxonsibi),[@Nandana KM](https://github.com/Nandana-pramod)
 
 ---
 
