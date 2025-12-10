@@ -9243,3 +9243,20 @@ werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'refere
 2025-11-01 14:58:14,580 - __main__ - INFO - Available species for classification: ['arabidopsis', 'bsubtilis', 'ecoli', 'human', 'mouse', 'zebrafish']
 2025-11-01 14:58:14,604 - werkzeug - WARNING -  * Debugger is active!
 2025-11-01 14:58:14,605 - werkzeug - INFO -  * Debugger PIN: 707-145-537
+2025-11-08 10:23:05,211 - __main__ - INFO - Model loaded successfully!
+2025-11-08 10:23:05,211 - __main__ - INFO - Model is a Pipeline with steps: ['pca', 'classifier']
+2025-11-08 10:23:05,211 - __main__ - INFO - Available species for classification: ['arabidopsis', 'bsubtilis', 'ecoli', 'human', 'mouse', 'zebrafish']
+2025-11-08 10:23:05,253 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-11-08 10:23:05,253 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-11-08 10:23:05,282 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-08 10:23:08,174 - __main__ - INFO - Model loaded successfully!
+2025-11-08 10:23:08,174 - __main__ - INFO - Model is a Pipeline with steps: ['pca', 'classifier']
+2025-11-08 10:23:08,174 - __main__ - INFO - Available species for classification: ['arabidopsis', 'bsubtilis', 'ecoli', 'human', 'mouse', 'zebrafish']
+2025-11-08 10:23:08,201 - werkzeug - WARNING -  * Debugger is active!
+2025-11-08 10:23:08,210 - werkzeug - INFO -  * Debugger PIN: 707-145-537
+2025-11-08 10:23:24,262 - werkzeug - INFO - 127.0.0.1 - - [08/Nov/2025 10:23:24] "GET / HTTP/1.1" 200 -
+2025-11-08 10:23:24,432 - werkzeug - INFO - 127.0.0.1 - - [08/Nov/2025 10:23:24] "[33mGET /static/images/dna-pattern.png HTTP/1.1[0m" 404 -
+2025-11-08 10:23:26,582 - werkzeug - INFO - 127.0.0.1 - - [08/Nov/2025 10:23:26] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-11-08 10:23:49,209 - werkzeug - INFO - 127.0.0.1 - - [08/Nov/2025 10:23:49] "GET /about HTTP/1.1" 200 -
+2025-11-08 10:23:49,252 - werkzeug - INFO - 127.0.0.1 - - [08/Nov/2025 10:23:49] "[33mGET /static/images/dna-pattern.png HTTP/1.1[0m" 404 -
