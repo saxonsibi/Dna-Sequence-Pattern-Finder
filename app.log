@@ -9260,3 +9260,293 @@ werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'refere
 2025-11-08 10:23:26,582 - werkzeug - INFO - 127.0.0.1 - - [08/Nov/2025 10:23:26] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
 2025-11-08 10:23:49,209 - werkzeug - INFO - 127.0.0.1 - - [08/Nov/2025 10:23:49] "GET /about HTTP/1.1" 200 -
 2025-11-08 10:23:49,252 - werkzeug - INFO - 127.0.0.1 - - [08/Nov/2025 10:23:49] "[33mGET /static/images/dna-pattern.png HTTP/1.1[0m" 404 -
+2026-04-14 11:37:07,284 - __main__ - INFO - Model loaded successfully!
+2026-04-14 11:37:07,284 - __main__ - INFO - Model is a Pipeline with steps: ['pca', 'classifier']
+2026-04-14 11:37:07,284 - __main__ - INFO - Available species for classification: ['arabidopsis', 'bsubtilis', 'ecoli', 'human', 'mouse', 'zebrafish']
+2026-04-14 11:37:07,326 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-04-14 11:37:07,326 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-04-14 11:37:07,349 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2026-04-14 11:37:10,591 - __main__ - INFO - Model loaded successfully!
+2026-04-14 11:37:10,591 - __main__ - INFO - Model is a Pipeline with steps: ['pca', 'classifier']
+2026-04-14 11:37:10,593 - __main__ - INFO - Available species for classification: ['arabidopsis', 'bsubtilis', 'ecoli', 'human', 'mouse', 'zebrafish']
+2026-04-14 11:37:10,617 - werkzeug - WARNING -  * Debugger is active!
+2026-04-14 11:37:10,635 - werkzeug - INFO -  * Debugger PIN: 707-145-537
+2026-04-14 11:37:10,679 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp\\client_middleware_digest_auth.py', reloading
+2026-04-14 11:37:10,700 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp\\client_middlewares.py', reloading
+2026-04-14 11:37:10,716 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp\\compression_utils.py', reloading
+2026-04-14 11:37:10,737 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp\\cookiejar.py', reloading
+2026-04-14 11:37:10,757 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp\\formdata.py', reloading
+2026-04-14 11:37:10,791 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp\\helpers.py', reloading
+2026-04-14 11:37:10,840 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp\\http.py', reloading
+2026-04-14 11:37:10,858 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp\\http_writer.py', reloading
+2026-04-14 11:37:10,875 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp\\http_websocket.py', reloading
+2026-04-14 11:37:10,899 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp\\_websocket\\models.py', reloading
+2026-04-14 11:37:10,920 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp\\multipart.py', reloading
+2026-04-14 11:37:10,943 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp\\payload.py', reloading
+2026-04-14 11:37:10,971 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp\\payload_streamer.py', reloading
+2026-04-14 11:37:10,985 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp\\resolver.py', reloading
+2026-04-14 11:37:11,019 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp\\streams.py', reloading
+2026-04-14 11:37:11,041 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp\\tracing.py', reloading
+2026-04-14 11:37:11,068 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp\\worker.py', reloading
+2026-04-14 11:37:11,082 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp_retry\\__init__.py', reloading
+2026-04-14 11:37:11,103 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp_retry\\client.py', reloading
+2026-04-14 11:37:11,128 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp_retry\\retry_options.py', reloading
+2026-04-14 11:37:11,175 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\aiohttp\\typedefs.py', reloading
+2026-04-14 11:37:11,186 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\yarl\\__init__.py', reloading
+2026-04-14 11:37:11,209 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\yarl\\_url.py', reloading
+2026-04-14 11:37:11,256 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\alembic\\__init__.py', reloading
+2026-04-14 11:37:11,274 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\altair\\__init__.py', reloading
+2026-04-14 11:37:11,308 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\altair\\vegalite\\__init__.py', reloading
+2026-04-14 11:37:11,326 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\altair\\vegalite\\v5\\__init__.py', reloading
+2026-04-14 11:37:11,368 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\altair\\vegalite\\v5\\api.py', reloading
+2026-04-14 11:37:11,415 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\altair\\vegalite\\v5\\schema\\__init__.py', reloading
+2026-04-14 11:37:11,449 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\altair\\vegalite\\v5\\schema\\channels.py', reloading
+2026-04-14 11:37:11,554 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\altair\\vegalite\\v5\\schema\\_typing.py', reloading
+2026-04-14 11:37:11,604 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\altair\\vegalite\\v5\\schema\\core.py', reloading
+2026-04-14 11:37:11,965 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2026-04-14 11:37:15,575 - __main__ - INFO - Model loaded successfully!
+2026-04-14 11:37:15,575 - __main__ - INFO - Model is a Pipeline with steps: ['pca', 'classifier']
+2026-04-14 11:37:15,575 - __main__ - INFO - Available species for classification: ['arabidopsis', 'bsubtilis', 'ecoli', 'human', 'mouse', 'zebrafish']
+2026-04-14 11:37:15,602 - werkzeug - WARNING -  * Debugger is active!
+2026-04-14 11:37:15,611 - werkzeug - INFO -  * Debugger PIN: 707-145-537
+2026-04-14 11:37:15,661 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\clang\\__init__.py', reloading
+2026-04-14 11:37:15,673 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\click\\__init__.py', reloading
+2026-04-14 11:37:15,708 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\click\\core.py', reloading
+2026-04-14 11:37:15,743 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\click\\decorators.py', reloading
+2026-04-14 11:37:15,764 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\click\\exceptions.py', reloading
+2026-04-14 11:37:15,790 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\click\\formatting.py', reloading
+2026-04-14 11:37:15,812 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\click\\globals.py', reloading
+2026-04-14 11:37:15,833 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\click\\parser.py', reloading
+2026-04-14 11:37:15,860 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\click\\termui.py', reloading
+2026-04-14 11:37:15,887 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\click\\types.py', reloading
+2026-04-14 11:37:15,910 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\click\\utils.py', reloading
+2026-04-14 11:37:15,929 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\click_didyoumean\\__init__.py', reloading
+2026-04-14 11:37:15,952 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\click_plugins\\__init__.py', reloading
+2026-04-14 11:37:15,964 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\click_repl\\__init__.py', reloading
+2026-04-14 11:37:15,985 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cloudpathlib\\__init__.py', reloading
+2026-04-14 11:37:16,008 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cloudpathlib\\anypath.py', reloading
+2026-04-14 11:37:16,035 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cloudpathlib\\azure\\azblobclient.py', reloading
+2026-04-14 11:37:16,055 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cloudpathlib\\azure\\azblobpath.py', reloading
+2026-04-14 11:37:16,078 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cloudpathlib\\cloudpath.py', reloading
+2026-04-14 11:37:16,117 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cloudpathlib\\patches.py', reloading
+2026-04-14 11:37:16,140 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cloudpathlib\\gs\\gsclient.py', reloading
+2026-04-14 11:37:16,173 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cloudpathlib\\gs\\gspath.py', reloading
+2026-04-14 11:37:16,200 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cloudpathlib\\http\\httpclient.py', reloading
+2026-04-14 11:37:16,222 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cloudpathlib\\http\\httppath.py', reloading
+2026-04-14 11:37:16,255 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cloudpathlib\\s3\\s3client.py', reloading
+2026-04-14 11:37:16,277 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cloudpathlib\\s3\\s3path.py', reloading
+2026-04-14 11:37:16,285 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cloudpickle\\__init__.py', reloading
+2026-04-14 11:37:16,319 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cloudpickle\\cloudpickle.py', reloading
+2026-04-14 11:37:16,339 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cmdstanpy\\__init__.py', reloading
+2026-04-14 11:37:16,368 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cmdstanpy\\compilation.py', reloading
+2026-04-14 11:37:16,390 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cmdstanpy\\install_cmdstan.py', reloading
+2026-04-14 11:37:16,423 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cmdstanpy\\model.py', reloading
+2026-04-14 11:37:16,451 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cmdstanpy\\stanfit\\__init__.py', reloading
+2026-04-14 11:37:16,472 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cmdstanpy\\stanfit\\gq.py', reloading
+2026-04-14 11:37:16,493 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cmdstanpy\\stanfit\\laplace.py', reloading
+2026-04-14 11:37:16,515 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cmdstanpy\\stanfit\\mcmc.py', reloading
+2026-04-14 11:37:16,534 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cmdstanpy\\stanfit\\mle.py', reloading
+2026-04-14 11:37:16,549 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cmdstanpy\\stanfit\\pathfinder.py', reloading
+2026-04-14 11:37:16,569 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cmdstanpy\\stanfit\\vb.py', reloading
+2026-04-14 11:37:16,583 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cmdstanpy\\utils\\__init__.py', reloading
+2026-04-14 11:37:16,610 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cmdstanpy\\utils\\cmdstan.py', reloading
+2026-04-14 11:37:16,626 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\cmdstanpy\\utils\\json.py', reloading
+2026-04-14 11:37:16,639 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\stanio\\__init__.py', reloading
+2026-04-14 11:37:16,971 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2026-04-14 11:37:20,369 - __main__ - INFO - Model loaded successfully!
+2026-04-14 11:37:20,369 - __main__ - INFO - Model is a Pipeline with steps: ['pca', 'classifier']
+2026-04-14 11:37:20,369 - __main__ - INFO - Available species for classification: ['arabidopsis', 'bsubtilis', 'ecoli', 'human', 'mouse', 'zebrafish']
+2026-04-14 11:37:20,387 - werkzeug - WARNING -  * Debugger is active!
+2026-04-14 11:37:20,395 - werkzeug - INFO -  * Debugger PIN: 707-145-537
+2026-04-14 11:37:20,444 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\future\\__init__.py', reloading
+2026-04-14 11:37:20,459 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\gast\\__init__.py', reloading
+2026-04-14 11:37:20,479 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\gcloud\\__init__.py', reloading
+2026-04-14 11:37:20,498 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\__init__.py', reloading
+2026-04-14 11:37:20,535 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\gitdb\\util.py', reloading
+2026-04-14 11:37:20,555 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\exc.py', reloading
+2026-04-14 11:37:20,588 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\gitdb\\exc.py', reloading
+2026-04-14 11:37:20,620 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\types.py', reloading
+2026-04-14 11:37:20,639 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\compat.py', reloading
+2026-04-14 11:37:20,665 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\config.py', reloading
+2026-04-14 11:37:20,684 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\objects\\__init__.py', reloading
+2026-04-14 11:37:20,700 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\objects\\blob.py', reloading
+2026-04-14 11:37:20,722 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\objects\\commit.py', reloading
+2026-04-14 11:37:20,742 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\objects\\base.py', reloading
+2026-04-14 11:37:20,758 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\objects\\submodule\\__init__.py', reloading
+2026-04-14 11:37:20,776 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\objects\\submodule\\root.py', reloading
+2026-04-14 11:37:20,802 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\objects\\submodule\\base.py', reloading
+2026-04-14 11:37:20,833 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\objects\\tag.py', reloading
+2026-04-14 11:37:20,854 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\objects\\tree.py', reloading
+2026-04-14 11:37:20,869 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\refs\\__init__.py', reloading
+2026-04-14 11:37:20,894 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\refs\\head.py', reloading
+2026-04-14 11:37:20,915 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\refs\\log.py', reloading
+2026-04-14 11:37:20,934 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\refs\\reference.py', reloading
+2026-04-14 11:37:20,958 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\refs\\remote.py', reloading
+2026-04-14 11:37:20,979 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\refs\\symbolic.py', reloading
+2026-04-14 11:37:21,000 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\refs\\tag.py', reloading
+2026-04-14 11:37:21,023 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\diff.py', reloading
+2026-04-14 11:37:21,042 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\db.py', reloading
+2026-04-14 11:37:21,062 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\gitdb\\db\\__init__.py', reloading
+2026-04-14 11:37:21,082 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\gitdb\\db\\base.py', reloading
+2026-04-14 11:37:21,100 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\gitdb\\db\\loose.py', reloading
+2026-04-14 11:37:21,118 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\gitdb\\db\\mem.py', reloading
+2026-04-14 11:37:21,132 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\gitdb\\db\\pack.py', reloading
+2026-04-14 11:37:21,154 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\gitdb\\db\\git.py', reloading
+2026-04-14 11:37:21,172 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\gitdb\\db\\ref.py', reloading
+2026-04-14 11:37:21,187 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\cmd.py', reloading
+2026-04-14 11:37:21,217 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\repo\\__init__.py', reloading
+2026-04-14 11:37:21,243 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\repo\\base.py', reloading
+2026-04-14 11:37:21,276 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\remote.py', reloading
+2026-04-14 11:37:21,299 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\util.py', reloading
+2026-04-14 11:37:21,321 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\index\\__init__.py', reloading
+2026-04-14 11:37:21,341 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\index\\typ.py', reloading
+2026-04-14 11:37:21,368 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\git\\index\\base.py', reloading
+2026-04-14 11:37:21,389 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\gitdb\\__init__.py', reloading
+2026-04-14 11:37:21,412 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\google\\api_core\\__init__.py', reloading
+2026-04-14 11:37:21,428 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\google\\auth\\__init__.py', reloading
+2026-04-14 11:37:21,731 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2026-04-14 11:37:25,096 - __main__ - INFO - Model loaded successfully!
+2026-04-14 11:37:25,096 - __main__ - INFO - Model is a Pipeline with steps: ['pca', 'classifier']
+2026-04-14 11:37:25,096 - __main__ - INFO - Available species for classification: ['arabidopsis', 'bsubtilis', 'ecoli', 'human', 'mouse', 'zebrafish']
+2026-04-14 11:37:25,123 - werkzeug - WARNING -  * Debugger is active!
+2026-04-14 11:37:25,130 - werkzeug - INFO -  * Debugger PIN: 707-145-537
+2026-04-14 11:37:25,187 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\huggingface_hub\\utils\\_cache_manager.py', reloading
+2026-04-14 11:37:25,208 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\huggingface_hub\\utils\\_cache_assets.py', reloading
+2026-04-14 11:37:25,236 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\huggingface_hub\\utils\\_runtime.py', reloading
+2026-04-14 11:37:25,260 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\huggingface_hub\\utils\\_auth.py', reloading
+2026-04-14 11:37:25,283 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\humanfriendly\\__init__.py', reloading
+2026-04-14 11:37:25,305 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\idna\\__init__.py', reloading
+2026-04-14 11:37:25,323 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\idna\\core.py', reloading
+2026-04-14 11:37:25,339 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\idna\\intranges.py', reloading
+2026-04-14 11:37:25,354 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\idna\\package_data.py', reloading
+2026-04-14 11:37:25,366 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\imageio\\__init__.py', reloading
+2026-04-14 11:37:25,434 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\imageio_ffmpeg\\__init__.py', reloading
+2026-04-14 11:37:25,451 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\imblearn\\__init__.py', reloading
+2026-04-14 11:37:25,470 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\imblearn\\_version.py', reloading
+2026-04-14 11:37:25,499 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\imblearn\\base.py', reloading
+2026-04-14 11:37:25,533 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\importlib_metadata\\__init__.py', reloading
+2026-04-14 11:37:25,555 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\importlib_metadata\\_meta.py', reloading
+2026-04-14 11:37:25,579 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\importlib_resources\\__init__.py', reloading
+2026-04-14 11:37:25,597 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\importlib_resources\\_common.py', reloading
+2026-04-14 11:37:25,616 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\importlib_resources\\_functional.py', reloading
+2026-04-14 11:37:25,630 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\importlib_resources\\abc.py', reloading
+2026-04-14 11:37:25,663 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\inflection\\__init__.py', reloading
+2026-04-14 11:37:25,683 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\isort\\__init__.py', reloading
+2026-04-14 11:37:25,700 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\isort\\_version.py', reloading
+2026-04-14 11:37:25,720 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\isort\\api.py', reloading
+2026-04-14 11:37:25,742 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\isort\\place.py', reloading
+2026-04-14 11:37:25,763 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\isort\\settings.py', reloading
+2026-04-14 11:37:25,794 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\itsdangerous\\__init__.py', reloading
+2026-04-14 11:37:25,804 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\itsdangerous\\encoding.py', reloading
+2026-04-14 11:37:25,822 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\itsdangerous\\exc.py', reloading
+2026-04-14 11:37:25,840 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\itsdangerous\\serializer.py', reloading
+2026-04-14 11:37:25,863 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\itsdangerous\\signer.py', reloading
+2026-04-14 11:37:25,884 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\itsdangerous\\timed.py', reloading
+2026-04-14 11:37:25,901 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\itsdangerous\\url_safe.py', reloading
+2026-04-14 11:37:25,923 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\jinja2\\bccache.py', reloading
+2026-04-14 11:37:25,964 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\jinja2\\exceptions.py', reloading
+2026-04-14 11:37:25,988 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\jinja2\\loaders.py', reloading
+2026-04-14 11:37:26,008 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\jinja2\\runtime.py', reloading
+2026-04-14 11:37:26,068 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\jinja2\\utils.py', reloading
+2026-04-14 11:37:26,152 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\joblib\\memory.py', reloading
+2026-04-14 11:37:26,446 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2026-04-14 11:37:29,808 - __main__ - INFO - Model loaded successfully!
+2026-04-14 11:37:29,810 - __main__ - INFO - Model is a Pipeline with steps: ['pca', 'classifier']
+2026-04-14 11:37:29,810 - __main__ - INFO - Available species for classification: ['arabidopsis', 'bsubtilis', 'ecoli', 'human', 'mouse', 'zebrafish']
+2026-04-14 11:37:29,834 - werkzeug - WARNING -  * Debugger is active!
+2026-04-14 11:37:29,840 - werkzeug - INFO -  * Debugger PIN: 707-145-537
+2026-04-14 11:37:29,885 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\ml_dtypes\\__init__.py', reloading
+2026-04-14 11:37:29,909 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\ml_dtypes\\_finfo.py', reloading
+2026-04-14 11:37:29,930 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\ml_dtypes\\_iinfo.py', reloading
+2026-04-14 11:37:30,006 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\moviepy\\__init__.py', reloading
+2026-04-14 11:37:30,036 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\moviepy\\audio\\__init__.py', reloading
+2026-04-14 11:37:30,057 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\moviepy\\audio\\AudioClip.py', reloading
+2026-04-14 11:37:30,079 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\moviepy\\audio\\io\\AudioFileClip.py', reloading
+2026-04-14 11:37:30,089 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\moviepy\\Effect.py', reloading
+2026-04-14 11:37:30,117 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\moviepy\\tools.py', reloading
+2026-04-14 11:37:30,132 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\moviepy\\version.py', reloading
+2026-04-14 11:37:30,138 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\moviepy\\video\\__init__.py', reloading
+2026-04-14 11:37:30,165 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\moviepy\\video\\compositing\\CompositeVideoClip.py', reloading
+2026-04-14 11:37:30,179 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\moviepy\\video\\io\\__init__.py', reloading
+2026-04-14 11:37:30,200 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\moviepy\\video\\io\\ImageSequenceClip.py', reloading
+2026-04-14 11:37:30,217 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\moviepy\\video\\io\\VideoFileClip.py', reloading
+2026-04-14 11:37:30,243 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\moviepy\\video\\VideoClip.py', reloading
+2026-04-14 11:37:30,263 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\mpl_toolkits\\axes_grid1\\__init__.py', reloading
+2026-04-14 11:37:30,283 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\mpl_toolkits\\axes_grid1\\axes_divider.py', reloading
+2026-04-14 11:37:30,312 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\mpl_toolkits\\axes_grid1\\axes_grid.py', reloading
+2026-04-14 11:37:30,333 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\mpl_toolkits\\axes_grid1\\parasite_axes.py', reloading
+2026-04-14 11:37:30,354 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\mpl_toolkits\\axisartist\\__init__.py', reloading
+2026-04-14 11:37:30,367 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\mpl_toolkits\\mplot3d\\__init__.py', reloading
+2026-04-14 11:37:30,398 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\mpl_toolkits\\mplot3d\\axes3d.py', reloading
+2026-04-14 11:37:30,424 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\mpl_toolkits\\__init__.py', reloading
+2026-04-14 11:37:30,445 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\mpmath\\__init__.py', reloading
+2026-04-14 11:37:30,461 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\multidict\\__init__.py', reloading
+2026-04-14 11:37:30,491 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\multidict\\_abc.py', reloading
+2026-04-14 11:37:30,522 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\multidict\\_multidict_py.py', reloading
+2026-04-14 11:37:30,548 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\multiprocess\\__init__.py', reloading
+2026-04-14 11:37:30,572 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\multitasking\\__init__.py', reloading
+2026-04-14 11:37:30,584 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\murmurhash\\__init__.py', reloading
+2026-04-14 11:37:30,607 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\mysqlx\\__init__.py', reloading
+2026-04-14 11:37:30,632 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\mysqlx\\connection.py', reloading
+2026-04-14 11:37:30,652 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\mysqlx\\crud.py', reloading
+2026-04-14 11:37:30,663 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\mysqlx\\dbdoc.py', reloading
+2026-04-14 11:37:30,688 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\mysqlx\\errors.py', reloading
+2026-04-14 11:37:30,721 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\mysqlx\\result.py', reloading
+2026-04-14 11:37:30,744 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\mysqlx\\statement.py', reloading
+2026-04-14 11:37:30,769 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\namex\\__init__.py', reloading
+2026-04-14 11:37:30,783 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\narwhals\\__init__.py', reloading
+2026-04-14 11:37:30,818 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\narwhals\\_utils.py', reloading
+2026-04-14 11:37:30,859 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\narwhals\\dataframe.py', reloading
+2026-04-14 11:37:31,185 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2026-04-14 11:37:34,852 - __main__ - INFO - Model loaded successfully!
+2026-04-14 11:37:34,852 - __main__ - INFO - Model is a Pipeline with steps: ['pca', 'classifier']
+2026-04-14 11:37:34,852 - __main__ - INFO - Available species for classification: ['arabidopsis', 'bsubtilis', 'ecoli', 'human', 'mouse', 'zebrafish']
+2026-04-14 11:37:34,875 - werkzeug - WARNING -  * Debugger is active!
+2026-04-14 11:37:34,886 - werkzeug - INFO -  * Debugger PIN: 707-145-537
+2026-04-14 11:37:34,927 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_core\\core_schema.py', reloading
+2026-04-14 11:37:34,958 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic\\aliases.py', reloading
+2026-04-14 11:37:34,977 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic\\annotated_handlers.py', reloading
+2026-04-14 11:37:34,998 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic\\config.py', reloading
+2026-04-14 11:37:35,021 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic\\fields.py', reloading
+2026-04-14 11:37:35,055 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic\\functional_serializers.py', reloading
+2026-04-14 11:37:35,083 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic\\functional_validators.py', reloading
+2026-04-14 11:37:35,111 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic\\json_schema.py', reloading
+2026-04-14 11:37:35,144 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic\\type_adapter.py', reloading
+2026-04-14 11:37:35,172 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic\\validate_call_decorator.py', reloading
+2026-04-14 11:37:35,193 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic\\warnings.py', reloading
+2026-04-14 11:37:35,215 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic\\deprecated\\class_validators.py', reloading
+2026-04-14 11:37:35,235 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic\\deprecated\\config.py', reloading
+2026-04-14 11:37:35,255 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic\\root_model.py', reloading
+2026-04-14 11:37:35,278 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_core\\__init__.py', reloading
+2026-04-14 11:37:35,339 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_settings\\__init__.py', reloading
+2026-04-14 11:37:35,363 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_settings\\exceptions.py', reloading
+2026-04-14 11:37:35,382 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_settings\\main.py', reloading
+2026-04-14 11:37:35,408 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_settings\\sources\\__init__.py', reloading
+2026-04-14 11:37:35,436 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_settings\\sources\\providers\\cli.py', reloading
+2026-04-14 11:37:35,471 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_settings\\sources\\providers\\aws.py', reloading
+2026-04-14 11:37:35,487 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_settings\\sources\\providers\\azure.py', reloading
+2026-04-14 11:37:35,506 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_settings\\sources\\providers\\dotenv.py', reloading
+2026-04-14 11:37:35,529 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_settings\\sources\\providers\\env.py', reloading
+2026-04-14 11:37:35,542 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_settings\\sources\\types.py', reloading
+2026-04-14 11:37:35,564 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_settings\\sources\\providers\\gcp.py', reloading
+2026-04-14 11:37:35,583 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_settings\\sources\\base.py', reloading
+2026-04-14 11:37:35,606 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_settings\\sources\\providers\\json.py', reloading
+2026-04-14 11:37:35,624 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_settings\\sources\\providers\\nested_secrets.py', reloading
+2026-04-14 11:37:35,640 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_settings\\sources\\providers\\pyproject.py', reloading
+2026-04-14 11:37:35,658 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_settings\\sources\\providers\\secrets.py', reloading
+2026-04-14 11:37:35,674 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_settings\\sources\\providers\\toml.py', reloading
+2026-04-14 11:37:35,687 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydantic_settings\\sources\\providers\\yaml.py', reloading
+2026-04-14 11:37:35,703 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydeck\\__init__.py', reloading
+2026-04-14 11:37:35,716 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydot\\__init__.py', reloading
+2026-04-14 11:37:35,744 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydot\\core.py', reloading
+2026-04-14 11:37:35,770 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydot\\exceptions.py', reloading
+2026-04-14 11:37:35,785 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydot\\classes.py', reloading
+2026-04-14 11:37:35,804 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydub\\__init__.py', reloading
+2026-04-14 11:37:35,822 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pydyf\\__init__.py', reloading
+2026-04-14 11:37:35,833 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pyhanko\\generated\\__init__.py', reloading
+2026-04-14 11:37:35,854 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pyhanko\\generated\\xml.py', reloading
+2026-04-14 11:37:35,869 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pyhanko\\keys\\__init__.py', reloading
+2026-04-14 11:37:35,889 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pyhanko\\keys\\pemder.py', reloading
+2026-04-14 11:37:35,917 - werkzeug - INFO -  * Detected change in 'C:\\Users\\Saxon sibi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pyhanko\\sign\\__init__.py', reloading
+2026-04-14 11:37:36,259 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
