@@ -1,6 +1,6 @@
 # Tools needed for building some packages
 Cython
-numpy==2.3.5
+numpy==1.26.4
 
 # Your app dependencies
 Flask==2.3.3
